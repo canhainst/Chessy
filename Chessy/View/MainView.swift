@@ -7,18 +7,28 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct MainView: View {
+    @StateObject var ViewModel = MainViewViewModel()
+    @State private var showSplash = true
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            if showSplash {
+                SplashView()
+            } else if ViewModel.isSignedIn, !ViewModel.currentUserID.isEmpty {
+                ChessyView(currentUserID: ViewModel.currentUserID)
+            } else {
+                LoginView()
+            }
         }
-        .padding()
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
+                showSplash = false
+            }
+        }
     }
 }
 
 #Preview {
-    ContentView()
+    MainView()
 }

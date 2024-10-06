@@ -103,6 +103,7 @@ struct LoginView: View {
                     NavigationLink("Create an account", destination: RegisterView())
                 }
                 .padding(.bottom, 50)
+                .navigationBarBackButtonHidden(true)
                 
                 Spacer()
             }

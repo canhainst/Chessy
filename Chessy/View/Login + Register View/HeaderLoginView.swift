@@ -24,6 +24,7 @@ struct HeaderLoginView: View {
                     .font(.system(size: 50))
                     .foregroundColor(Color.white)
                     .scaleEffect(keyboardHeight > 0 ? 0.8 : 1)
+                    .offset(y: (keyboardHeight > 0 ? 20 : 0))
                     .bold()
 
                 

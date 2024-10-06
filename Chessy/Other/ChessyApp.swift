@@ -10,12 +10,14 @@ import SwiftUI
 
 @main
 struct ChessyApp: App {
+    @StateObject private var mainViewModel = MainViewViewModel()
+    
     init(){
         FirebaseApp.configure()
     }
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
         }
     }
 }
