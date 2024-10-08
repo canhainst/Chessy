@@ -12,6 +12,9 @@ class ChessGameViewModel: ObservableObject {
     @Published var whiteTurn: Bool
     @Published var roomCode: String
     @Published var deadPieces: [ChessPiece?]
+    @Published var promote = false
+    @Published var promoteChoice: String?
+    @Published var pawnPromoted: ChessPiece?
     
     init() {
         self.board = Array(repeating: Array(repeating: nil, count: 8), count: 8)
@@ -22,13 +25,7 @@ class ChessGameViewModel: ObservableObject {
     }
     
     func getDeadPieces(color: PlayerColor) -> [ChessPiece?] {
-        var deadPieces: [ChessPiece?] = []
-        for piece in deadPieces { 
-            if piece?.color == color {
-                deadPieces.append(piece)
-            }
-        }
-        return deadPieces
+        return deadPieces.filter { $0?.color == color }
     }
     
     private func setupBoard() {
@@ -75,9 +72,43 @@ class ChessGameViewModel: ObservableObject {
         board[start.0][start.1] = nil
         piece.position = end
         
+        if let pawn = piece as? Pawn {
+            if (pawn.color == .white && end.0 == 0) || (pawn.color == .black && end.0 == 7) {
+                pawnPromoted = pawn
+                promote = true
+            }
+        }
+        
         toggleTurn()
     }
+    
+    func promote(pawn: ChessPiece) {
+        // Lấy vị trí của quân cờ
+        let end = pawn.position
 
+        let chessPiecePromoted: ChessPiece
+        
+        switch promoteChoice {
+        case "queen":
+            chessPiecePromoted = Queen(color: pawn.color, position: end) // Sử dụng end
+        case "knight":
+            chessPiecePromoted = Knight(color: pawn.color, position: end)
+        case "rook":
+            chessPiecePromoted = Rook(color: pawn.color, position: end)
+        case "bishop":
+            chessPiecePromoted = Bishop(color: pawn.color, position: end)
+        default:
+            chessPiecePromoted = Queen(color: pawn.color, position: end) // Mặc định là quân hậu
+        }
+        
+        // Đặt quân cờ đã thăng cấp vào bàn cờ
+        board[end.0][end.1] = chessPiecePromoted
+        promoteChoice = nil // Reset lựa chọn sau khi thăng cấp
+        pawnPromoted = nil
+    }
+
+
+    
     func piecesCastling(from start: (Int, Int), to end: (Int, Int)) {
         let row = start.0
 

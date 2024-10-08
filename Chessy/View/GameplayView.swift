@@ -18,112 +18,148 @@ struct GameplayView: View {
     @State private var playerE = "Tokumei Shisa"
     
     var body: some View {
-        VStack (spacing: 0) {
-            HStack {
-                Image(systemName: "arrow.left")
-                    .font(.title)
+        ZStack {
+            VStack (spacing: 0) {
+                HStack {
+                    Image(systemName: "arrow.left")
+                        .font(.title)
+                    
+                    Spacer()
+                    
+                    Text("Room Code: B31686")
+                }
+                .padding()
                 
-                Spacer()
-                
-                Text("Room Code: B31686")
-            }
-            .padding()
-            
-            HStack (alignment: .top){
-                HStack (alignment: .top) {
-                    AsyncImage(url: URL(string: avatar)) { phase in
-                        switch phase {
-                        case .empty:
-                            // Placeholder while loading
-                            BlankAvatarView(width: 50, height: 50)
-                        case .success(let image):
-                            // Successfully loaded image
-                            image
+                HStack (alignment: .top){
+                    HStack (alignment: .top) {
+                        AsyncImage(url: URL(string: avatar)) { phase in
+                            switch phase {
+                            case .empty:
+                                // Placeholder while loading
+                                BlankAvatarView(width: 50, height: 50)
+                            case .success(let image):
+                                // Successfully loaded image
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                            case .failure:
+                                // Failure loading image
+                                BlankAvatarView(width: 50, height: 50)
+                            @unknown default:
+                                BlankAvatarView(width: 50, height: 50)
+                            }
+                        }
+                        VStack (alignment: .leading, spacing: 0) {
+                            Text(player)
+                            Image("VN")
                                 .resizable()
-                                .scaledToFill()
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
-                        case .failure:
-                            // Failure loading image
-                            BlankAvatarView(width: 50, height: 50)
-                        @unknown default:
-                            BlankAvatarView(width: 50, height: 50)
+                                .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
+                                .frame(width: 30)
                         }
                     }
-                    VStack (alignment: .leading, spacing: 0) {
-                        Text(player)
-                        Image("VN")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
-                            .frame(width: 30)
+                    .fixedSize()
+                    .padding()
+                    .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
+                    
+                    if !viewModel.deadPieces.isEmpty {
+                        getDeadPiecesImage(for: .white)
                     }
+                    
+                    Spacer()
                 }
-                .fixedSize()
-                .padding()
-                .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
+                .padding() // Khoảng đệm xung quanh
                 
-                if !viewModel.deadPieces.isEmpty {
-                    getDeadPiecesImage(for: .white)
-                }
+                Text("Black's turn")
+                    .font(.headline) // Đặt kiểu chữ
+                    .padding() // Thêm khoảng cách xung quanh văn bản
+                    .foregroundColor(viewModel.whiteTurn ? .clear : .black)
                 
-                Spacer()
-            }
-            .padding() // Khoảng đệm xung quanh
-            
-            Text("Black's turn")
-                .font(.headline) // Đặt kiểu chữ
-                .padding() // Thêm khoảng cách xung quanh văn bản
-                .foregroundColor(viewModel.whiteTurn ? .clear : .black)
-            
-            ChessBoardView(viewModel: viewModel)
-                .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
-            
-            
-            Text("White's turn")
-                .font(.headline) // Đặt kiểu chữ
-                .padding() // Thêm khoảng cách xung quanh văn bản
-                .foregroundColor(viewModel.whiteTurn ? .black : .clear)
-            
-            HStack (alignment: .top, spacing: 0) {
-                Spacer()
+                ChessBoardView(viewModel: viewModel)
+                    .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
                 
-                if !viewModel.deadPieces.isEmpty {
-                    getDeadPiecesImage(for: .black)
-                }
                 
-                HStack (alignment: .top) {
-                    VStack (alignment: .trailing, spacing: 0) {
-                        Text(playerE)
-                        Image("VN")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
-                            .frame(width: 30)
+                Text("White's turn")
+                    .font(.headline) // Đặt kiểu chữ
+                    .padding() // Thêm khoảng cách xung quanh văn bản
+                    .foregroundColor(viewModel.whiteTurn ? .black : .clear)
+                
+                HStack (alignment: .top, spacing: 0) {
+                    Spacer()
+                    
+                    if !viewModel.deadPieces.isEmpty {
+                        getDeadPiecesImage(for: .black)
                     }
-                    AsyncImage(url: URL(string: avatarE)) { phase in
-                        switch phase {
-                        case .empty:
-                            // Placeholder while loading
-                            BlankAvatarView(width: 50, height: 50)
-                        case .success(let image):
-                            // Successfully loaded image
-                            image
+                    
+                    HStack (alignment: .top) {
+                        VStack (alignment: .trailing, spacing: 0) {
+                            Text(playerE)
+                            Image("VN")
                                 .resizable()
-                                .scaledToFill()
-                                .frame(width: 50, height: 50)
-                                .clipShape(Circle())
-                        case .failure:
-                            // Failure loading image
-                            BlankAvatarView(width: 50, height: 50)
-                        @unknown default:
-                            BlankAvatarView(width: 50, height: 50)
+                                .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
+                                .frame(width: 30)
+                        }
+                        AsyncImage(url: URL(string: avatarE)) { phase in
+                            switch phase {
+                            case .empty:
+                                // Placeholder while loading
+                                BlankAvatarView(width: 50, height: 50)
+                            case .success(let image):
+                                // Successfully loaded image
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(Circle())
+                            case .failure:
+                                // Failure loading image
+                                BlankAvatarView(width: 50, height: 50)
+                            @unknown default:
+                                BlankAvatarView(width: 50, height: 50)
+                            }
+                        }
+                    }
+                    .fixedSize()
+                    .padding()
+                    .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
+                }
+                .padding() // Khoảng đệm xung quanh
+            }
+            
+            if viewModel.promote {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea() // Làm mờ nền phía sau
+                
+                HStack (spacing: 10){
+                    let pieces = [
+                        ("queen", "Queen"),
+                        ("knight", "Knight"),
+                        ("bishop", "Bishop"),
+                        ("rook", "Rook")
+                    ]
+                    
+                    ForEach(pieces, id: \.0) { piece in
+                        VStack {
+                            Image(viewModel.whiteTurn ? "\(piece.0)-white" : "\(piece.0)-black")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 25, height: 25)
+                            
+                            Text(piece.1)
+                        }
+                        .onTapGesture {
+                            viewModel.promoteChoice = piece.0
+                            viewModel.promote(pawn: viewModel.pawnPromoted!)
+                            viewModel.promote = false
                         }
                     }
                 }
-                .fixedSize()
                 .padding()
-                .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
+                .background(.white)
+                .cornerRadius(10)
+                .padding()
             }
-            .padding() // Khoảng đệm xung quanh
         }
     }
     
@@ -132,20 +168,20 @@ struct GameplayView: View {
         let chunkedPieces = pieces.chunked(into: 6)
 
         return VStack {
-            ForEach(0..<chunkedPieces.count, id: \.self) { i in
-                HStack {
-                    ForEach(0..<chunkedPieces[i].count, id: \.self) { j in
-                        let piece = chunkedPieces[i][j]
-                        Image(pieceSymbol(for: piece))
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 25)
+                    ForEach(0..<chunkedPieces.count, id: \.self) { i in
+                        HStack {
+                            ForEach(0..<chunkedPieces[i].count, id: \.self) { j in
+                                let piece = chunkedPieces[i][j]
+                                Image(pieceSymbol(for: piece))
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 25)
+                            }
+                        }
                     }
                 }
-            }
-        }
-        .fixedSize()
-        .frame(alignment: color == .white ? .leading : .trailing)
+                .fixedSize()
+                .frame(alignment: color == .white ? .leading : .trailing)
     }
     
     func pieceSymbol(for piece: ChessPiece) -> String {

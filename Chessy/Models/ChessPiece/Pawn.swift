@@ -8,6 +8,8 @@
 import Foundation
 
 class Pawn: ChessPiece {
+    var isPromoted: Bool = false
+    
     override init(color: PlayerColor, position: (Int, Int)) {
         super.init(color: color, position: position)
     }
@@ -47,6 +49,10 @@ class Pawn: ChessPiece {
 
         return moves
     }
-
+    
+    func promote(to newPiece: ChessPiece) {
+        isPromoted = true
+        // Cập nhật vị trí cho quân cờ mới
+        self.position = newPiece.position
+    }
 }
-
