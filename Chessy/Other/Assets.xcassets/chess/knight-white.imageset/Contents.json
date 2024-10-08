@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "chess.png",
+      "filename" : "chess_white.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

@@ -21,3 +21,24 @@ extension Encodable {
         }
     }
 }
+
+extension Array {
+    func chunked(into size: Int) -> [[Element]] {
+        var chunks: [[Element]] = []
+        var currentChunk: [Element] = []
+        
+        for element in self {
+            currentChunk.append(element)
+            if currentChunk.count == size {
+                chunks.append(currentChunk)
+                currentChunk = []
+            }
+        }
+        
+        if !currentChunk.isEmpty {
+            chunks.append(currentChunk)
+        }
+        
+        return chunks
+    }
+}

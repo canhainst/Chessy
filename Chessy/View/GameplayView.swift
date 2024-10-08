@@ -29,7 +29,7 @@ struct GameplayView: View {
             }
             .padding()
             
-            HStack{
+            HStack (alignment: .top){
                 HStack (alignment: .top) {
                     AsyncImage(url: URL(string: avatar)) { phase in
                         switch phase {
@@ -58,8 +58,13 @@ struct GameplayView: View {
                             .frame(width: 30)
                     }
                 }
+                .fixedSize()
                 .padding()
                 .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
+                
+                if !viewModel.deadPieces.isEmpty {
+                    getDeadPiecesImage(for: .white)
+                }
                 
                 Spacer()
             }
@@ -79,8 +84,12 @@ struct GameplayView: View {
                 .padding() // Thêm khoảng cách xung quanh văn bản
                 .foregroundColor(viewModel.whiteTurn ? .black : .clear)
             
-            HStack {
+            HStack (alignment: .top, spacing: 0) {
                 Spacer()
+                
+                if !viewModel.deadPieces.isEmpty {
+                    getDeadPiecesImage(for: .black)
+                }
                 
                 HStack (alignment: .top) {
                     VStack (alignment: .trailing, spacing: 0) {
@@ -110,10 +119,44 @@ struct GameplayView: View {
                         }
                     }
                 }
+                .fixedSize()
                 .padding()
                 .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
             }
             .padding() // Khoảng đệm xung quanh
+        }
+    }
+    
+    func getDeadPiecesImage(for color: PlayerColor) -> some View {
+        let pieces = viewModel.deadPieces.compactMap { $0 }.filter { $0.color == color }
+        let chunkedPieces = pieces.chunked(into: 6)
+
+        return VStack {
+            ForEach(0..<chunkedPieces.count, id: \.self) { i in
+                HStack {
+                    ForEach(0..<chunkedPieces[i].count, id: \.self) { j in
+                        let piece = chunkedPieces[i][j]
+                        Image(pieceSymbol(for: piece))
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 25)
+                    }
+                }
+            }
+        }
+        .fixedSize()
+        .frame(alignment: color == .white ? .leading : .trailing)
+    }
+    
+    func pieceSymbol(for piece: ChessPiece) -> String {
+        switch piece {
+            case is Pawn: return piece.color == .white ? "pawn-white" : "pawn-black"
+            case is Knight: return piece.color == .white ? "knight-white" : "knight-black"
+            case is Bishop: return piece.color == .white ? "bishop-white" : "bishop-black"
+            case is Rook: return piece.color == .white ? "rook-white" : "rook-black"
+            case is Queen: return piece.color == .white ? "queen-white" : "queen-black"
+            case is King: return piece.color == .white ? "king-white" : "king-black"
+            default: return ""
         }
     }
 }

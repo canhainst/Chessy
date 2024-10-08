@@ -9,14 +9,28 @@ import Foundation
 
 class ChessGameViewModel: ObservableObject {
     @Published private(set) var board: [[ChessPiece?]]
-    @Published private(set) var whiteTurn: Bool
+    @Published var whiteTurn: Bool
+    @Published var roomCode: String
+    @Published var deadPieces: [ChessPiece?]
     
     init() {
         self.board = Array(repeating: Array(repeating: nil, count: 8), count: 8)
         self.whiteTurn = true
+        self.roomCode = ""
+        self.deadPieces = []
         setupBoard()
     }
-
+    
+    func getDeadPieces(color: PlayerColor) -> [ChessPiece?] {
+        var deadPieces: [ChessPiece?] = []
+        for piece in deadPieces { 
+            if piece?.color == color {
+                deadPieces.append(piece)
+            }
+        }
+        return deadPieces
+    }
+    
     private func setupBoard() {
         // Khởi tạo bàn cờ với các quân cờ
         for i in 0..<8 {
@@ -47,18 +61,43 @@ class ChessGameViewModel: ObservableObject {
     func movePiece(from start: (Int, Int), to end: (Int, Int)) {
         guard let piece = board[start.0][start.1] else { return }
         
-        // Kiểm tra nếu vị trí đích có quân cờ của cùng màu không
-        if let targetPiece = board[end.0][end.1], targetPiece.color == piece.color {
-            return // Không cho phép di chuyển nếu đích có quân cờ cùng màu
+        if let _ = board[end.0][end.1] {
+            board[end.0][end.1] = nil
         }
 
-        // Di chuyển quân cờ
+        // Kiểm tra nếu quân cờ là vua và thực hiện nhập thành
+        if piece is King && abs(start.1 - end.1) == 2 {
+            piecesCastling(from: start, to: end)
+        }
+
+        // Di chuyển quân cờ bình thường
         board[end.0][end.1] = piece
         board[start.0][start.1] = nil
         piece.position = end
         
         toggleTurn()
     }
+
+    func piecesCastling(from start: (Int, Int), to end: (Int, Int)) {
+        let row = start.0
+
+        if end.1 > start.1 {
+            // Nhập thành bên phải
+            if let rook = board[row][7], rook is Rook {
+                board[row][5] = rook
+                board[row][7] = nil
+                rook.position = (row, 5)
+            }
+        } else {
+            // Nhập thành bên trái
+            if let rook = board[row][0], rook is Rook {
+                board[row][3] = rook
+                board[row][0] = nil
+                rook.position = (row, 3)
+            }
+        }
+    }
+
     
     func toggleTurn() {
         whiteTurn.toggle()

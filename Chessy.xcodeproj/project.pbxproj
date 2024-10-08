@@ -150,6 +150,7 @@
 		8A24CC332C0DDDBB003CF826 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8A4328C02CB3970A00B6A2A7 /* Dialog */,
 				8A2C2A912C15C0080058CA57 /* TabView */,
 				8A2C2A922C15C0380058CA57 /* Login + Register View */,
 				8A24CC1D2C0DD8B3003CF826 /* MainView.swift */,
@@ -217,6 +218,13 @@
 				8AB265962C0F0C9B00A085FB /* HeaderLoginView.swift */,
 			);
 			path = "Login + Register View";
+			sourceTree = "<group>";
+		};
+		8A4328C02CB3970A00B6A2A7 /* Dialog */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Dialog;
 			sourceTree = "<group>";
 		};
 		8A5887102CB0DF93008FCBDC /* ChessPiece */ = {
