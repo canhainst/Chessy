@@ -37,6 +37,8 @@ struct ChessBoardView: View {
     }
 
     private func pieceTapped(at position: (Int, Int)) {
+        print("piece tapped")
+        
         if let selected = selectedPiecePosition, selected == position {
             // Nếu đã chọn quân cờ, bỏ chọn
             selectedPiecePosition = nil
@@ -44,13 +46,13 @@ struct ChessBoardView: View {
         } else {
             // Nếu chọn quân cờ mới
             if let piece = viewModel.getPiece(at: position) {
-                if piece.color == .white && viewModel.whiteTurn { // Chỉ cho phép người chơi trắng di chuyển quân cờ trắng
+                if piece.color == .white && viewModel.whiteTurn! && viewModel.playerColor == .white { // Chỉ cho phép người chơi trắng di chuyển quân cờ trắng
                     selectedPiecePosition = position
                     availableMoves = piece.possibleMoves(on: viewModel.board) // Lấy các ô có thể di chuyển
-                } else if piece.color == .black && !viewModel.whiteTurn {
+                } else if piece.color == .black && !viewModel.whiteTurn! && viewModel.playerColor == .black {
                     selectedPiecePosition = position
                     availableMoves = piece.possibleMoves(on: viewModel.board) // Lấy các ô có thể di chuyển
-                } else if let selected = selectedPiecePosition, (viewModel.whiteTurn && piece.color == .black && availableMoves.contains(where: {$0 == position})) || (!viewModel.whiteTurn && piece.color == .white && availableMoves.contains(where: {$0 == position})) {
+                } else if let selected = selectedPiecePosition, (viewModel.whiteTurn! && piece.color == .black && availableMoves.contains(where: {$0 == position})) || (!viewModel.whiteTurn! && piece.color == .white && availableMoves.contains(where: {$0 == position})) {
                     viewModel.movePiece(from: selected, to: position) // Di chuyển quân cờ
                     selectedPiecePosition = nil
                     availableMoves = [] // Reset các ô có thể di chuyển
@@ -112,12 +114,12 @@ struct ChessSquareView: View {
             return ""
         }
         switch piece {
-        case is Pawn: return piece.color == viewModel.playerColor ? "pawn-white" : "pawn-black"
-            case is Knight: return piece.color == viewModel.playerColor ? "knight-white" : "knight-black"
-            case is Bishop: return piece.color == viewModel.playerColor ? "bishop-white" : "bishop-black"
-            case is Rook: return piece.color == viewModel.playerColor ? "rook-white" : "rook-black"
-            case is Queen: return piece.color == viewModel.playerColor ? "queen-white" : "queen-black"
-            case is King: return piece.color == viewModel.playerColor ? "king-white" : "king-black"
+        case is Pawn: return piece.color == .white ? "pawn-white" : "pawn-black"
+        case is Knight: return piece.color == .white ? "knight-white" : "knight-black"
+        case is Bishop: return piece.color == .white ? "bishop-white" : "bishop-black"
+        case is Rook: return piece.color == .white ? "rook-white" : "rook-black"
+        case is Queen: return piece.color == .white ? "queen-white" : "queen-black"
+        case is King: return piece.color == .white ? "king-white" : "king-black"
             default: return ""
         }
     }

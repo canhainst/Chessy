@@ -26,6 +26,7 @@ struct GameplayView: View {
                         .onTapGesture {
                             presentationMode.wrappedValue.dismiss()
                             MatchModel.exitGame(playerID: viewModel.playerID, roomID: viewModel.roomCode)
+                            viewModel.whiteTurn = nil
                         }
                     
                     Spacer()
@@ -43,25 +44,9 @@ struct GameplayView: View {
                 } else {
                     HStack (alignment: .top){
                         HStack (alignment: .top) {
-                            AsyncImage(url: URL(string: avatarE)) { phase in
-                                switch phase {
-                                case .empty:
-                                    // Placeholder while loading
-                                    BlankAvatarView(width: 50, height: 50)
-                                case .success(let image):
-                                    // Successfully loaded image
-                                    image
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50)
-                                        .clipShape(Circle())
-                                case .failure:
-                                    // Failure loading image
-                                    BlankAvatarView(width: 50, height: 50)
-                                @unknown default:
-                                    BlankAvatarView(width: 50, height: 50)
-                                }
-                            }
+                            AvatarView(avatarLink: avatarE, width: 50, height: 50)
+                                .frame(alignment: .leading)
+                            
                             VStack (alignment: .leading, spacing: 0) {
                                 Text(viewModel.playerE!.name)
                                     .foregroundColor(.black)
@@ -87,10 +72,12 @@ struct GameplayView: View {
                     }
                     .padding() // Khoảng đệm xung quanh
                     
-                    Text("\(viewModel.playerE?.name ?? "")'s turn")
-                        .font(.headline)
-                        .padding()
-                        .foregroundColor((viewModel.whiteTurn && viewModel.playerColor == .black) || (!viewModel.whiteTurn && viewModel.playerColor == .white) ? .clear : .black)
+                    if viewModel.whiteTurn != nil {
+                        Text("\(viewModel.playerE?.name ?? "")'s turn")
+                            .font(.headline)
+                            .padding()
+                            .foregroundColor(((viewModel.whiteTurn! && viewModel.playerColor == .white) || (!viewModel.whiteTurn! && viewModel.playerColor == .black)) ? .clear : .black)
+                    }
                 }
                 
                 ChessBoardView(viewModel: viewModel)
@@ -99,10 +86,12 @@ struct GameplayView: View {
                         viewModel.listenForGameChanges(roomCode: viewModel.roomCode)
                     }
                 
-                Text("\(viewModel.player?.name ?? "")'s turn")
-                    .font(.headline)
-                    .padding()
-                    .foregroundColor((viewModel.whiteTurn && viewModel.playerColor == .black) || (!viewModel.whiteTurn && viewModel.playerColor == .white) ? .black : .clear)
+                if viewModel.whiteTurn != nil {
+                    Text("\(viewModel.player?.name ?? "")'s turn")
+                        .font(.headline)
+                        .padding()
+                        .foregroundColor((viewModel.whiteTurn! && viewModel.playerColor == .white) || (!viewModel.whiteTurn! && viewModel.playerColor == .black) ? .black : .clear)
+                }
                 
                 HStack (alignment: .top, spacing: 0) {
                     Spacer()
@@ -124,25 +113,9 @@ struct GameplayView: View {
                                     .frame(width: 30)
                             }
                         }
-                        AsyncImage(url: URL(string: avatar)) { phase in
-                            switch phase {
-                            case .empty:
-                                // Placeholder while loading
-                                BlankAvatarView(width: 50, height: 50)
-                            case .success(let image):
-                                // Successfully loaded image
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
-                            case .failure:
-                                // Failure loading image
-                                BlankAvatarView(width: 50, height: 50)
-                            @unknown default:
-                                BlankAvatarView(width: 50, height: 50)
-                            }
-                        }
+                        
+                        AvatarView(avatarLink: avatar, width: 50, height: 50)
+                            .frame(alignment: .trailing)
                     }
                     .fixedSize()
                     .padding()
@@ -150,6 +123,7 @@ struct GameplayView: View {
                 }
                 .padding() // Khoảng đệm xung quanh
             }
+            .background(.white)
             
             if viewModel.playerE != nil {
                 GameStartDialogView(avatarE: avatarE, viewModel: viewModel)

@@ -25,7 +25,7 @@ struct PromoteViewDialog: View {
                 
                 ForEach(pieces, id: \.0) { piece in
                     VStack {
-                        Image(viewModel.whiteTurn ? "\(piece.0)-white" : "\(piece.0)-black")
+                        Image(viewModel.whiteTurn! ? "\(piece.0)-white" : "\(piece.0)-black")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 25, height: 25)

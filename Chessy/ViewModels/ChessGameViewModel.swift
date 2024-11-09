@@ -11,7 +11,7 @@ import FirebaseDatabase
 
 class ChessGameViewModel: ObservableObject {
     @Published private(set) var board: [[ChessPiece?]]
-    @Published var whiteTurn: Bool
+    @Published var whiteTurn: Bool?
     @Published var roomCode: String
     @Published var deadPieces: [ChessPiece?]
     
@@ -35,10 +35,8 @@ class ChessGameViewModel: ObservableObject {
         self.roomCode = ""
         self.deadPieces = []
         self.playerID = Auth.auth().currentUser!.uid
-        self.whiteTurn = true
-        
-        setupBoard()
-        
+//        self.whiteTurn = true
+                
         User.getUserByID(userID: playerID) { [weak self] user in
             if let user = user {
                 self?.player = user
@@ -66,10 +64,12 @@ class ChessGameViewModel: ObservableObject {
                 if whitePlayerID == self.playerID {
                     self.playerColor = .white
                     self.whiteTurn = true
+                    self.setupBoard()
                     print("Current player is White")
                 } else {
                     self.playerColor = .black
-                    self.whiteTurn = false
+                    self.whiteTurn = true
+                    self.setupBoard()
                     print("Current player is Black")
                 }
             }
@@ -140,30 +140,33 @@ class ChessGameViewModel: ObservableObject {
     }
     
     private func setupBoard() {
+        let playerEColor: PlayerColor = self.playerColor == .white ? .black : .white
+        board = Array(repeating: Array(repeating: nil, count: 8), count: 8)
+        
         // Khởi tạo bàn cờ với các quân cờ
         for i in 0..<8 {
-            board[6][i] = Pawn(color: .white, position: (6, i)) // Quân cờ trắng
-            board[1][i] = Pawn(color: .black, position: (1, i)) // Quân cờ đen
+            board[6][i] = Pawn(color: self.playerColor!, position: (6, i))
+            board[1][i] = Pawn(color: playerEColor, position: (1, i))
         }
         // Đặt các quân cờ khác cho trắng
-        board[7][0] = Rook(color: .white, position: (7, 0))
-        board[7][7] = Rook(color: .white, position: (7, 7))
-        board[7][1] = Knight(color: .white, position: (7, 1))
-        board[7][6] = Knight(color: .white, position: (7, 6))
-        board[7][2] = Bishop(color: .white, position: (7, 2))
-        board[7][5] = Bishop(color: .white, position: (7, 5))
-        board[7][3] = Queen(color: .white, position: (7, 3))
-        board[7][4] = King(color: .white, position: (7, 4))
+        board[7][0] = Rook(color: self.playerColor!, position: (7, 0))
+        board[7][7] = Rook(color: self.playerColor!, position: (7, 7))
+        board[7][1] = Knight(color: self.playerColor!, position: (7, 1))
+        board[7][6] = Knight(color: self.playerColor!, position: (7, 6))
+        board[7][2] = Bishop(color: self.playerColor!, position: (7, 2))
+        board[7][5] = Bishop(color: self.playerColor!, position: (7, 5))
+        board[7][3] = Queen(color: self.playerColor!, position: (7, 3))
+        board[7][4] = King(color: self.playerColor!, position: (7, 4))
         
         // Đặt các quân cờ khác cho đen
-        board[0][0] = Rook(color: .black, position: (0, 0))
-        board[0][7] = Rook(color: .black, position: (0, 7))
-        board[0][1] = Knight(color: .black, position: (0, 1))
-        board[0][6] = Knight(color: .black, position: (0, 6))
-        board[0][2] = Bishop(color: .black, position: (0, 2))
-        board[0][5] = Bishop(color: .black, position: (0, 5))
-        board[0][3] = Queen(color: .black, position: (0, 3))
-        board[0][4] = King(color: .black, position: (0, 4))
+        board[0][0] = Rook(color: playerEColor, position: (0, 0))
+        board[0][7] = Rook(color: playerEColor, position: (0, 7))
+        board[0][1] = Knight(color: playerEColor, position: (0, 1))
+        board[0][6] = Knight(color: playerEColor, position: (0, 6))
+        board[0][2] = Bishop(color: playerEColor, position: (0, 2))
+        board[0][5] = Bishop(color: playerEColor, position: (0, 5))
+        board[0][3] = Queen(color: playerEColor, position: (0, 3))
+        board[0][4] = King(color: playerEColor, position: (0, 4))
     }
 
     func movePiece(from start: (Int, Int), to end: (Int, Int)) {
@@ -240,7 +243,7 @@ class ChessGameViewModel: ObservableObject {
 
     
     func toggleTurn() {
-        whiteTurn.toggle()
+        whiteTurn!.toggle()
     }
 
     func getPiece(at position: (Int, Int)) -> ChessPiece? {

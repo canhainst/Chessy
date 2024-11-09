@@ -22,27 +22,9 @@ struct ChessyProfileView: View {
                 LoadingView()
             } else if let user = profile.user {
                 HStack {
-                    AsyncImage(url: URL(string: avatar)) { phase in
-                        switch phase {
-                        case .empty:
-                            // Placeholder while loading
-                            BlankAvatarView(width: 100, height: 100)
-                        case .success(let image):
-                            // Successfully loaded image
-                            image
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-                        case .failure:
-                            // Failure loading image
-                            BlankAvatarView(width: 100, height: 100)
-                        @unknown default:
-                            BlankAvatarView(width: 100, height: 100)
-                        }
-                    }
-                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 20)
+                    AvatarView(avatarLink: avatar, width: 100, height: 100)
+                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 20)
                     
                     Button {
                         ViewModel.logout()
@@ -220,6 +202,35 @@ struct BlankAvatarView: View {
                 .frame(width: width * 0.5, height: height * 0.5)
                 .foregroundColor(.gray)
         }
+    }
+}
+
+struct AvatarView: View {
+    let avatarLink: String
+    let width: CGFloat
+    let height: CGFloat
+    
+    var body: some View {
+        AsyncImage(url: URL(string: avatarLink)) { phase in
+            switch phase {
+            case .empty:
+                // Placeholder while loading
+                BlankAvatarView(width: width, height: height)
+            case .success(let image):
+                // Successfully loaded image
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: width, height: height)
+                    .clipShape(Circle())
+            case .failure:
+                // Failure loading image
+                BlankAvatarView(width: width, height: height)
+            @unknown default:
+                BlankAvatarView(width: width, height: height)
+            }
+        }
+        .frame(alignment: .leading)
     }
 }
 

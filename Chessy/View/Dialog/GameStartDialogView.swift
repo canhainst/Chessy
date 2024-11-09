@@ -13,6 +13,7 @@ struct GameStartDialogView: View {
         
     @State private var countdown = 5
     @State var playerEtmp: String = ""
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         if playerEtmp != viewModel.playerEID  {
@@ -25,34 +26,21 @@ struct GameStartDialogView: View {
                         .font(.title)
                         .foregroundColor(.black)
 
-                    HStack (alignment: .top) {
-                        AsyncImage(url: URL(string: avatarE)) { phase in
-                            switch phase {
-                            case .empty:
-                                // Placeholder while loading
-                                BlankAvatarView(width: 50, height: 50)
-                            case .success(let image):
-                                // Successfully loaded image
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
-                            case .failure:
-                                // Failure loading image
-                                BlankAvatarView(width: 50, height: 50)
-                            @unknown default:
-                                BlankAvatarView(width: 50, height: 50)
-                            }
-                        }
-                        VStack (alignment: .leading, spacing: 0) {
+                    HStack {
+                        AvatarView(avatarLink: avatarE, width: 70, height: 70)
+                        VStack (alignment: .leading, spacing: 10) {
                             Text(viewModel.playerE!.name)
                                 .foregroundColor(.black)
-                            Image("VN")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
-                                .frame(width: 30)
+                            HStack {
+                                Image("VN")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
+                                    .frame(width: 30)
+                                Text(" - \(viewModel.playerE!.region)")
+                                    .foregroundColor(.black)
+                            }
                         }
+                        Spacer()
                     }
                     .frame(width: 250)
                     .padding()
@@ -61,18 +49,6 @@ struct GameStartDialogView: View {
                     Text("The game will start in \(countdown) seconds.")
                         .font(.headline)
                         .foregroundColor(.red)
-
-                    Button {
-
-                    } label: {
-                        Text("Quit game")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(width: 160)
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                    }
                 }
                 .padding()
                 .frame(width: 350)

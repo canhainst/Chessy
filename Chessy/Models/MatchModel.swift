@@ -65,57 +65,84 @@ struct MatchModel: Codable {
         }
     }
     
-    static func insertNewGame(matchModel: MatchModel) {
-        let db = Database.database().reference()
-        db.child("games").child(matchModel.gameID.uuidString).setValue(matchModel.asDictionary()) { (error, _) in
-            if let error = error {
-                print("Failed to save game: \(error.localizedDescription)")
-            } else {
-                print("Game saved successfully in Realtime Database")
+    static func insertNewGame(matchModel: MatchModel, completion: @escaping (Bool) -> Void) {
+            let db = Database.database().reference()
+            
+            // Kiểm tra xem roomID đã tồn tại chưa
+            db.child("games").queryOrdered(byChild: "roomID").queryEqual(toValue: matchModel.roomID).observeSingleEvent(of: .value) { snapshot in
+                if snapshot.exists() {
+                    // Mã phòng đã tồn tại
+                    print("Room code already exists. Insertion failed.")
+                    completion(false)
+                } else {
+                    // Mã phòng chưa tồn tại, cho phép thêm vào
+                    db.child("games").child(matchModel.gameID.uuidString).setValue(matchModel.asDictionary()) { (error, _) in
+                        if let error = error {
+                            print("Failed to save game: \(error.localizedDescription)")
+                            completion(false)
+                        } else {
+                            print("Game saved successfully in Realtime Database")
+                            completion(true)
+                        }
+                    }
+                }
             }
         }
-    }
     
-    static func joinGame(playerID: String, roomID: String) {
+    static func joinGame(playerID: String, roomID: String, completion: @escaping (Int) -> Void) {
         let db = Database.database().reference()
-        
+
         // Tìm game theo roomID
         let query = db.child("games").queryOrdered(byChild: "roomID").queryEqual(toValue: roomID)
-        
+
         query.observeSingleEvent(of: .value) { snapshot in
             guard let gamesData = snapshot.value as? [String: Any] else {
                 print("Không tìm thấy game với roomID này")
+                completion(1)  // Return error code 1 if room is not found
                 return
             }
-            
+
             if let gameKey = gamesData.keys.first,
                var game = gamesData[gameKey] as? [String: Any] {
-                
-                // Kiểm tra nếu trường playerID đã tồn tại
+
+                // Kiểm tra số lượng người chơi hiện tại
                 if var players = game["playerID"] as? [String] {
+                    // Kiểm tra nếu đã có 2 người chơi
+                    if players.count >= 2 {
+                        print("Phòng đã có đủ 2 người chơi")
+                        completion(2)  // Return error code 2 if the room already has 2 players
+                        return
+                    }
+
                     // Thêm playerID mới vào danh sách nếu nó chưa có
                     if !players.contains(playerID) {
                         players.append(playerID)
                         game["playerID"] = players
-                        
+
                         // Cập nhật lại trong Firebase
                         db.child("games").child(gameKey).updateChildValues(["playerID": players]) { error, _ in
                             if let error = error {
                                 print("Lỗi khi cập nhật playerID: \(error.localizedDescription)")
+                                completion(3)  // Return 0 for any error during the update
                             } else {
                                 print("Cập nhật playerID thành công")
+                                completion(0)  // Return success code 3 when the player is added successfully
                             }
                         }
                     } else {
                         print("playerID đã tồn tại trong game")
+                        completion(3)  // Return 0 if the player already exists in the game
                     }
+                } else {
+                    print("Không tìm thấy playerID trong game")
+                    completion(3)  // Return 0 if playerID is missing in the game data
                 }
             } else {
                 print("Không tìm thấy game với roomID này")
+                completion(1)  // Return error code 1 if the game with roomID is not found
             }
         }
     }
-
     
     static func exitGame(playerID: String, roomID: String) {
         let db = Database.database().reference()
