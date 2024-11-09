@@ -6,22 +6,133 @@
 //
 
 import Foundation
+import FirebaseAuth
+import FirebaseDatabase
 
 class ChessGameViewModel: ObservableObject {
     @Published private(set) var board: [[ChessPiece?]]
     @Published var whiteTurn: Bool
     @Published var roomCode: String
     @Published var deadPieces: [ChessPiece?]
+    
     @Published var promote = false
     @Published var promoteChoice: String?
     @Published var pawnPromoted: ChessPiece?
     
+    @Published var playerEID: String?
+    @Published var playerE: User?
+    @Published var avatarE: String?
+    
+    @Published var playerID: String
+    @Published var player: User?
+    @Published var avatar: String?
+    
+    @Published var playerColor: PlayerColor?
+    @Published var isHost: Bool?
+        
     init() {
         self.board = Array(repeating: Array(repeating: nil, count: 8), count: 8)
-        self.whiteTurn = true
         self.roomCode = ""
         self.deadPieces = []
+        self.playerID = Auth.auth().currentUser!.uid
+        self.whiteTurn = true
+        
         setupBoard()
+        
+        User.getUserByID(userID: playerID) { [weak self] user in
+            if let user = user {
+                self?.player = user
+            } else {
+                print("User not found or failed to fetch user data")
+            }
+        }
+    }
+    
+    func setPlayerColor(roomCode: String) {
+        let db = Database.database().reference()
+            
+        let query = db.child("games").queryOrdered(byChild: "roomID").queryEqual(toValue: roomCode)
+        
+        query.observeSingleEvent(of: .value) { snapshot in
+            guard let gameData = snapshot.children.allObjects.first as? DataSnapshot,
+                  let gameDict = gameData.value as? [String: Any],
+                  let _ = gameDict["playerID"] as? [String] else {
+                print("Không tìm thấy game hoặc không có playerID nào.")
+                return
+            }
+            
+            // Kiểm tra nếu đã có "whitePiece" trong dữ liệu
+            if let whitePlayerID = gameDict["whitePiece"] as? String {
+                if whitePlayerID == self.playerID {
+                    self.playerColor = .white
+                    self.whiteTurn = true
+                    print("Current player is White")
+                } else {
+                    self.playerColor = .black
+                    self.whiteTurn = false
+                    print("Current player is Black")
+                }
+            }
+        }
+    }
+    
+    func listenForGameChanges(roomCode: String) {
+        let gamesRef = Database.database().reference().child("games")
+        
+        gamesRef.observe(.value, with: { [weak self] snapshot in
+            guard self != nil else { return }
+            
+            for child in snapshot.children {
+                if let gameSnapshot = child as? DataSnapshot,
+                   let gameData = gameSnapshot.value as? [String: Any],
+                   let gameRoomID = gameData["roomID"] as? String,
+                   gameRoomID == roomCode {
+                    
+                    print("Found game with roomCode \(roomCode)")
+                    
+                    if let host = gameData["host"] as? String {
+                        self?.isHost = (self?.playerID == host)
+                    }
+                    
+                    if let playerIDs = gameData["playerID"] as? [String] {
+                        let currentCount = playerIDs.count
+                        
+                        print("Số lượng playerID hiện tại: \(currentCount)")
+                        
+                        for (index, playerID) in playerIDs.enumerated() {
+                            print("PlayerID \(index): \(playerID)")
+                            if currentCount == 2 {
+                                if playerID != self?.playerID {
+                                    self?.playerEID = playerID
+                                    User.getUserByID(userID: (self?.playerEID)!) { [weak self] user in
+                                        if let user = user {
+                                            self?.playerE = user
+                                        } else {
+                                            print("User not found or failed to fetch user data")
+                                        }
+                                    }
+                                }
+                            }
+                            if currentCount == 1 {
+                                self?.playerEID = nil
+                                self?.playerE = nil
+                                
+                                gameSnapshot.ref.child("whitePiece").removeValue { error, _ in
+                                    if let error = error {
+                                        print("Failed to remove whitePiece: \(error.localizedDescription)")
+                                    } else {
+                                        print("whitePiece removed as only one player left in the game")
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        print("Không có playerID nào trong game này.")
+                    }                    
+                    break
+                }
+            }
+        })
     }
     
     func getDeadPieces(color: PlayerColor) -> [ChessPiece?] {
@@ -106,8 +217,6 @@ class ChessGameViewModel: ObservableObject {
         promoteChoice = nil // Reset lựa chọn sau khi thăng cấp
         pawnPromoted = nil
     }
-
-
     
     func piecesCastling(from start: (Int, Int), to end: (Int, Int)) {
         let row = start.0

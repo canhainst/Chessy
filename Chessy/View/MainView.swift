@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct MainView: View {
-    @StateObject var ViewModel = MainViewViewModel()
+    @StateObject var viewModel = MainViewViewModel()
     @State private var showSplash = true
     
     var body: some View {
         Group {
             if showSplash {
                 SplashView()
-            } else if ViewModel.isSignedIn, !ViewModel.currentUserID.isEmpty {
-                ChessyView(currentUserID: ViewModel.currentUserID)
+            } else if viewModel.isSignedIn, !viewModel.currentUserID.isEmpty {
+                ChessyView(currentUserID: viewModel.currentUserID)
             } else {
                 LoginView()
             }

@@ -136,28 +136,28 @@ struct User: Codable {
     
     func setRank() -> String {
         return switch exp {
-                        case _ where exp >= 6000:
-                            "Conqueror"
-                        case _ where exp >= 3500:
-                            "ACE Domination" + " " + intToRoman((exp - 2500) / 100 + 1)
-                        case _ where exp >= 3000:
-                            "ACE Master" + " " + intToRoman((exp - 2500) / 100 + 1)
-                        case _ where exp >= 2500:
-                            "ACE" + " " + intToRoman((exp - 2500) / 100 + 1)
-                        case _ where exp >= 2000:
-                            "Crown" + " " + intToRoman2((exp - 2000) / 100 + 1)
-                        case _ where exp >= 1500:
-                            "Diamond" + " " + intToRoman2((exp - 1500) / 100 + 1)
-                        case _ where exp >= 1000:
-                            "Platinum" + " " + intToRoman2((exp - 1000) / 100 + 1)
-                        case _ where exp >= 600:
-                            "Gold" + " " + intToRoman2((exp - 600) / 100 + 1)
-                        case _ where exp >= 300:
-                            "Silver" + " " + intToRoman2((exp - 300) / 100 + 1)
-                        case _ where exp > 0:
-                            "Bronze" + " " + intToRoman2(exp / 100 + 1)
-                        default:
-                            "Unrank"
-                    }
+            case _ where exp >= 6000:
+                "Conqueror"
+            case _ where exp >= 3500:
+                "ACE Domination" + " " + intToRoman((exp - 2500) / 100 + 1)
+            case _ where exp >= 3000:
+                "ACE Master" + " " + intToRoman((exp - 2500) / 100 + 1)
+            case _ where exp >= 2500:
+                "ACE" + " " + intToRoman((exp - 2500) / 100 + 1)
+            case _ where exp >= 2000:
+                "Crown" + " " + intToRoman2((exp - 2000) / 100 + 1)
+            case _ where exp >= 1500:
+                "Diamond" + " " + intToRoman2((exp - 1500) / 100 + 1)
+            case _ where exp >= 1000:
+                "Platinum" + " " + intToRoman2((exp - 1000) / 100 + 1)
+            case _ where exp >= 600:
+                "Gold" + " " + intToRoman2((exp - 600) / 100 + 1)
+            case _ where exp >= 300:
+                "Silver" + " " + intToRoman2((exp - 300) / 100 + 1)
+            case _ where exp > 0:
+                "Bronze" + " " + intToRoman2(exp / 100 + 1)
+            default:
+                "Unrank"
+        }
     }
 }

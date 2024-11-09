@@ -36,5 +36,4 @@ class ProfileViewModel: ObservableObject {
             self.errorMessage = nil
         }
     }
-    
 }

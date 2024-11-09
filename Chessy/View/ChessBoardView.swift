@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct ChessBoardView: View {
     @ObservedObject var viewModel: ChessGameViewModel
     @State private var selectedPiecePosition: (Int, Int)? // Lưu vị trí quân cờ được chọn
@@ -22,7 +20,7 @@ struct ChessBoardView: View {
                 HStack(spacing: 0) {
                     Spacer() // Đẩy các hình vuông vào giữa
                     ForEach(0..<8) { column in
-                        ChessSquareView(piece: viewModel.getPiece(at: (row, column)),
+                        ChessSquareView(viewModel: viewModel, piece: viewModel.getPiece(at: (row, column)),
                                         row: row,
                                         column: column,
                                         isHighlighted: availableMoves.contains(where: { $0 == (row, column) }),
@@ -74,6 +72,8 @@ struct ChessBoardView: View {
 
 
 struct ChessSquareView: View {
+    @ObservedObject var viewModel: ChessGameViewModel
+    
     var piece: ChessPiece?
     var row: Int
     var column: Int
@@ -87,7 +87,10 @@ struct ChessSquareView: View {
                 .frame(width: 45, height: 45)
                 .border(isHighlighted ? Color.black : Color.white, width: 0.2)
                 .onTapGesture {
-                    onTap() // Gọi closure khi nhấn
+                    guard let playerEID = viewModel.playerEID, !playerEID.isEmpty else {
+                        return // Không làm gì khi playerEID là nil hoặc rỗng
+                    }
+                    onTap() // Gọi closure khi playerEID không rỗng
                 }
             
             if let piece = piece {
@@ -105,13 +108,16 @@ struct ChessSquareView: View {
     }
 
     func pieceSymbol(for piece: ChessPiece) -> String {
+        guard let playerEID = viewModel.playerEID, !playerEID.isEmpty, viewModel.playerColor != nil else {
+            return ""
+        }
         switch piece {
-            case is Pawn: return piece.color == .white ? "pawn-white" : "pawn-black"
-            case is Knight: return piece.color == .white ? "knight-white" : "knight-black"
-            case is Bishop: return piece.color == .white ? "bishop-white" : "bishop-black"
-            case is Rook: return piece.color == .white ? "rook-white" : "rook-black"
-            case is Queen: return piece.color == .white ? "queen-white" : "queen-black"
-            case is King: return piece.color == .white ? "king-white" : "king-black"
+        case is Pawn: return piece.color == viewModel.playerColor ? "pawn-white" : "pawn-black"
+            case is Knight: return piece.color == viewModel.playerColor ? "knight-white" : "knight-black"
+            case is Bishop: return piece.color == viewModel.playerColor ? "bishop-white" : "bishop-black"
+            case is Rook: return piece.color == viewModel.playerColor ? "rook-white" : "rook-black"
+            case is Queen: return piece.color == viewModel.playerColor ? "queen-white" : "queen-black"
+            case is King: return piece.color == viewModel.playerColor ? "king-white" : "king-black"
             default: return ""
         }
     }

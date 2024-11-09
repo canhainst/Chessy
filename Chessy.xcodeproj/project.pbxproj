@@ -38,6 +38,8 @@
 		8A58871C2CB0DFEA008FCBDC /* King.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A58871B2CB0DFEA008FCBDC /* King.swift */; };
 		8AA4034B2C1DB8B200E0AEE3 /* sad.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AA4034A2C1DB8B200E0AEE3 /* sad.json */; };
 		8AA403502C1E06A200E0AEE3 /* ChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA4034F2C1E06A200E0AEE3 /* ChartViewModel.swift */; };
+		8AA7A4EC2CB8DAE900BF37A5 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 8AA7A4EB2CB8DAE900BF37A5 /* SocketIO */; };
+		8AA7A4EE2CBA017C00BF37A5 /* MatchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA7A4ED2CBA017B00BF37A5 /* MatchModel.swift */; };
 		8AAA8D2D2C1D5F7400BCF372 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 8AAA8D2C2C1D5F7400BCF372 /* Lottie */; };
 		8AAA8D2F2C1D5FFC00BCF372 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAA8D2E2C1D5FFC00BCF372 /* LottieView.swift */; };
 		8AAA8D312C1D604500BCF372 /* fire.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AAA8D302C1D604500BCF372 /* fire.json */; };
@@ -45,6 +47,9 @@
 		8AB265952C0F0C7100A085FB /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB265942C0F0C7100A085FB /* RegisterView.swift */; };
 		8AB265972C0F0C9B00A085FB /* HeaderLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB265962C0F0C9B00A085FB /* HeaderLoginView.swift */; };
 		8AB2659B2C0F1AE800A085FB /* LoginViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB2659A2C0F1AE800A085FB /* LoginViewViewModel.swift */; };
+		8AB326F52CDED524005F2CD3 /* GameStartDialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB326F42CDED524005F2CD3 /* GameStartDialogView.swift */; };
+		8AB326F72CDEEFA7005F2CD3 /* PromoteViewDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB326F62CDEEFA7005F2CD3 /* PromoteViewDialog.swift */; };
+		8AB326F92CDF02DB005F2CD3 /* InputRoomCodeViewDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB326F82CDF02DB005F2CD3 /* InputRoomCodeViewDialog.swift */; };
 		8ABF76252C1B775A007639E5 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 8ABF76242C1B775A007639E5 /* FirebaseDatabase */; };
 		8ABF76272C1B87D2007639E5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8ABF76262C1B87D2007639E5 /* GoogleService-Info.plist */; };
 		8AD65AE82C1099F40046BEF0 /* RegisterViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD65AE72C1099F40046BEF0 /* RegisterViewViewModel.swift */; };
@@ -82,12 +87,16 @@
 		8A58871B2CB0DFEA008FCBDC /* King.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = King.swift; sourceTree = "<group>"; };
 		8AA4034A2C1DB8B200E0AEE3 /* sad.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sad.json; sourceTree = "<group>"; };
 		8AA4034F2C1E06A200E0AEE3 /* ChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewModel.swift; sourceTree = "<group>"; };
+		8AA7A4ED2CBA017B00BF37A5 /* MatchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchModel.swift; sourceTree = "<group>"; };
 		8AAA8D2E2C1D5FFC00BCF372 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
 		8AAA8D302C1D604500BCF372 /* fire.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fire.json; sourceTree = "<group>"; };
 		8AB265922C0F0C1800A085FB /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		8AB265942C0F0C7100A085FB /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		8AB265962C0F0C9B00A085FB /* HeaderLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderLoginView.swift; sourceTree = "<group>"; };
 		8AB2659A2C0F1AE800A085FB /* LoginViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewViewModel.swift; sourceTree = "<group>"; };
+		8AB326F42CDED524005F2CD3 /* GameStartDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStartDialogView.swift; sourceTree = "<group>"; };
+		8AB326F62CDEEFA7005F2CD3 /* PromoteViewDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoteViewDialog.swift; sourceTree = "<group>"; };
+		8AB326F82CDF02DB005F2CD3 /* InputRoomCodeViewDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputRoomCodeViewDialog.swift; sourceTree = "<group>"; };
 		8ABF76262C1B87D2007639E5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8AD65AE72C1099F40046BEF0 /* RegisterViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewViewModel.swift; sourceTree = "<group>"; };
 		8AF4767D2C1649C100E5ABCB /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -103,6 +112,7 @@
 				8A24CC2E2C0DDA7E003CF826 /* FirebaseFirestore in Frameworks */,
 				8ABF76252C1B775A007639E5 /* FirebaseDatabase in Frameworks */,
 				8A24CC302C0DDA7E003CF826 /* FirebaseFirestoreSwift in Frameworks */,
+				8AA7A4EC2CB8DAE900BF37A5 /* SocketIO in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,6 +192,7 @@
 				8A5887102CB0DF93008FCBDC /* ChessPiece */,
 				8A2C2A932C15C7CC0058CA57 /* UserModel.swift */,
 				8A58870A2CB0D69C008FCBDC /* ChessModel.swift */,
+				8AA7A4ED2CBA017B00BF37A5 /* MatchModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -223,6 +234,9 @@
 		8A4328C02CB3970A00B6A2A7 /* Dialog */ = {
 			isa = PBXGroup;
 			children = (
+				8AB326F42CDED524005F2CD3 /* GameStartDialogView.swift */,
+				8AB326F62CDEEFA7005F2CD3 /* PromoteViewDialog.swift */,
+				8AB326F82CDF02DB005F2CD3 /* InputRoomCodeViewDialog.swift */,
 			);
 			path = Dialog;
 			sourceTree = "<group>";
@@ -280,6 +294,7 @@
 				8A24CC2F2C0DDA7E003CF826 /* FirebaseFirestoreSwift */,
 				8ABF76242C1B775A007639E5 /* FirebaseDatabase */,
 				8AAA8D2C2C1D5F7400BCF372 /* Lottie */,
+				8AA7A4EB2CB8DAE900BF37A5 /* SocketIO */,
 			);
 			productName = Chessy;
 			productReference = 8A24CC182C0DD8B3003CF826 /* Chessy.app */;
@@ -312,6 +327,7 @@
 			packageReferences = (
 				8A24CC2A2C0DDA7E003CF826 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				8AAA8D2B2C1D5F7400BCF372 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				8AA7A4EA2CB8DAE900BF37A5 /* XCRemoteSwiftPackageReference "socket" */,
 			);
 			productRefGroup = 8A24CC192C0DD8B3003CF826 /* Products */;
 			projectDirPath = "";
@@ -347,9 +363,12 @@
 				8A58870D2CB0D70C008FCBDC /* ChessGameViewModel.swift in Sources */,
 				8A58870B2CB0D69C008FCBDC /* ChessModel.swift in Sources */,
 				8AB265972C0F0C9B00A085FB /* HeaderLoginView.swift in Sources */,
+				8AA7A4EE2CBA017C00BF37A5 /* MatchModel.swift in Sources */,
 				8AAA8D2F2C1D5FFC00BCF372 /* LottieView.swift in Sources */,
+				8AB326F92CDF02DB005F2CD3 /* InputRoomCodeViewDialog.swift in Sources */,
 				8A2C2A882C15BD5D0058CA57 /* ChessyHomeView.swift in Sources */,
 				8A5887092CB0C4E3008FCBDC /* GameplayView.swift in Sources */,
+				8AB326F52CDED524005F2CD3 /* GameStartDialogView.swift in Sources */,
 				8A2C2A962C15C88D0058CA57 /* MainViewViewModel.swift in Sources */,
 				8AB2659B2C0F1AE800A085FB /* LoginViewViewModel.swift in Sources */,
 				8A5887182CB0DFD3008FCBDC /* Bishop.swift in Sources */,
@@ -370,6 +389,7 @@
 				8A24CC1C2C0DD8B3003CF826 /* ChessyApp.swift in Sources */,
 				8AA403502C1E06A200E0AEE3 /* ChartViewModel.swift in Sources */,
 				8A5887162CB0DFC6008FCBDC /* Knight.swift in Sources */,
+				8AB326F72CDEEFA7005F2CD3 /* PromoteViewDialog.swift in Sources */,
 				8AD65AE82C1099F40046BEF0 /* RegisterViewViewModel.swift in Sources */,
 				8A5887122CB0DFAB008FCBDC /* Pawn.swift in Sources */,
 				8A5887142CB0DFB7008FCBDC /* Rook.swift in Sources */,
@@ -525,6 +545,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = NT.Chessy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -557,6 +581,10 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = NT.Chessy;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -595,6 +623,14 @@
 				minimumVersion = 10.27.0;
 			};
 		};
+		8AA7A4EA2CB8DAE900BF37A5 /* XCRemoteSwiftPackageReference "socket" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/socketio/socket.io-client-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		8AAA8D2B2C1D5F7400BCF372 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios";
@@ -620,6 +656,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8A24CC2A2C0DDA7E003CF826 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		8AA7A4EB2CB8DAE900BF37A5 /* SocketIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8AA7A4EA2CB8DAE900BF37A5 /* XCRemoteSwiftPackageReference "socket" */;
+			productName = SocketIO;
 		};
 		8AAA8D2C2C1D5F7400BCF372 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;

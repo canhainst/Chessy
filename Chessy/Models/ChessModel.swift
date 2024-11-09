@@ -60,5 +60,4 @@ struct ChessBoard {
         pieces[0][6] = Knight(color: .black, position: (0, 6))
         pieces[0][7] = Rook(color: .black, position: (0, 7))
     }
-
 }
