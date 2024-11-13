@@ -37,8 +37,6 @@ struct ChessBoardView: View {
     }
 
     private func pieceTapped(at position: (Int, Int)) {
-        print("piece tapped")
-        
         if let selected = selectedPiecePosition, selected == position {
             // Nếu đã chọn quân cờ, bỏ chọn
             selectedPiecePosition = nil
@@ -53,17 +51,16 @@ struct ChessBoardView: View {
                     selectedPiecePosition = position
                     availableMoves = piece.possibleMoves(on: viewModel.board) // Lấy các ô có thể di chuyển
                 } else if let selected = selectedPiecePosition, (viewModel.whiteTurn! && piece.color == .black && availableMoves.contains(where: {$0 == position})) || (!viewModel.whiteTurn! && piece.color == .white && availableMoves.contains(where: {$0 == position})) {
-                    viewModel.movePiece(from: selected, to: position) // Di chuyển quân cờ
+                    viewModel.movePiece(from: selected, to: position, control: true) // Di chuyển quân cờ
                     selectedPiecePosition = nil
                     availableMoves = [] // Reset các ô có thể di chuyển
                     
                     viewModel.deadPieces.append(piece)
                 }
             } else if let selected = selectedPiecePosition {
-                // Nếu chọn ô đã chọn quân cờ, thực hiện di chuyển
                 if availableMoves.contains(where: { $0 == position }) {
                     // Nếu vị trí được chọn là một trong những ô có thể di chuyển
-                    viewModel.movePiece(from: selected, to: position) // Di chuyển quân cờ
+                    viewModel.movePiece(from: selected, to: position, control: true) // Di chuyển quân cờ
                     selectedPiecePosition = nil
                     availableMoves = [] // Reset các ô có thể di chuyển
                 }

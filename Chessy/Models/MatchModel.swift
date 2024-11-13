@@ -20,19 +20,76 @@ struct Move: Codable {
     let positionAfterMoved: Position
 }
 
-struct MovesPieces: Codable {
+struct pieceMove: Codable {
+    let pieceColor: String
     let movedPiece: String
     let move: Move
+    var pawnPromoted: String?
 }
 
 struct MatchModel: Codable {
     let gameID: UUID
     let roomID: String
     let playerID: [String?]
-    let movesPieces: [MovesPieces?]
+    var pieceMoves: [pieceMove?]
     let playerWinID: String?
     let host: String
     let whitePiece: String?
+    
+    static func promote(roomID: String, promotedPiece: String) {
+        let db = Database.database().reference()
+        
+        let query = db.child("games").queryOrdered(byChild: "roomID").queryEqual(toValue: roomID)
+        
+        query.observeSingleEvent(of: .value) { snapshot in
+            guard let gameSnapshot = snapshot.children.allObjects.first as? DataSnapshot,
+                  let matchData = try? gameSnapshot.data(as: MatchModel.self) else {
+                print("Error: Could not retrieve or decode MatchModel.")
+                return
+            }
+            
+            var pieceMoves = matchData.pieceMoves
+            pieceMoves[matchData.pieceMoves.count - 1]?.pawnPromoted = promotedPiece
+            
+            gameSnapshot.ref.child("pieceMoves").setValue(pieceMoves.map { $0.asDictionary() }) { error, _ in
+                if let error = error {
+                    print("Failed to update movesPieces: \(error.localizedDescription)")
+                } else {
+                    print("movesPieces updated successfully in Firebase.")
+                }
+            }
+        }
+    }
+    
+    static func saveMovePiece(pieceMoves: [pieceMove], roomID: String) {
+        let db = Database.database().reference()
+        
+        // Tìm game có roomID được cung cấp
+        let query = db.child("games").queryOrdered(byChild: "roomID").queryEqual(toValue: roomID)
+        
+        query.observeSingleEvent(of: .value) { snapshot in
+            // Kiểm tra xem có dữ liệu không
+            guard let gameSnapshot = snapshot.children.allObjects.first as? DataSnapshot,
+                  let gameData = gameSnapshot.value as? [String: Any],
+                  let playerIDs = gameData["playerID"] as? [String],
+                  !playerIDs.isEmpty else {
+                print("Room ID not found.")
+                return
+            }
+            
+            // Convert each MovesPieces object to a dictionary using asDictionary()
+            let movesArray = pieceMoves.map { $0.asDictionary() }
+            
+            // Update the movesPieces field in Firebase
+            gameSnapshot.ref.child("pieceMoves").setValue(movesArray) { error, _ in
+                if let error = error {
+                    print("Failed to update movesPieces: \(error.localizedDescription)")
+                } else {
+                    print("movesPieces updated successfully in Firebase.")
+                }
+            }
+        }
+    }
     
     static func setWhitePiece(roomID: String) {
         let db = Database.database().reference()
@@ -46,7 +103,7 @@ struct MatchModel: Codable {
                   let gameData = gameSnapshot.value as? [String: Any],
                   let playerIDs = gameData["playerID"] as? [String],
                   !playerIDs.isEmpty else {
-                print("Không tìm thấy game hoặc danh sách playerID trống.")
+                print("Room ID not found.")
                 return
             }
             
@@ -183,6 +240,15 @@ struct MatchModel: Codable {
                                             print("Failed to update host: \(error.localizedDescription)")
                                         } else {
                                             print("Host updated successfully to \(newHost)")
+                                        }
+                                    }
+                                    
+                                    // Remove the pieceMoves array
+                                    gameSnapshot.ref.child("pieceMoves").removeValue { (error, _) in
+                                        if let error = error {
+                                            print("Failed to delete pieceMoves: \(error.localizedDescription)")
+                                        } else {
+                                            print("pieceMoves array deleted successfully")
                                         }
                                     }
                                 }

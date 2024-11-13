@@ -29,13 +29,14 @@ class ChessGameViewModel: ObservableObject {
     
     @Published var playerColor: PlayerColor?
     @Published var isHost: Bool?
+    
+    @Published var pieceMoves: [pieceMove]?
         
     init() {
         self.board = Array(repeating: Array(repeating: nil, count: 8), count: 8)
         self.roomCode = ""
         self.deadPieces = []
         self.playerID = Auth.auth().currentUser!.uid
-//        self.whiteTurn = true
                 
         User.getUserByID(userID: playerID) { [weak self] user in
             if let user = user {
@@ -55,7 +56,7 @@ class ChessGameViewModel: ObservableObject {
             guard let gameData = snapshot.children.allObjects.first as? DataSnapshot,
                   let gameDict = gameData.value as? [String: Any],
                   let _ = gameDict["playerID"] as? [String] else {
-                print("Không tìm thấy game hoặc không có playerID nào.")
+                print("User not found or failed to fetch user data")
                 return
             }
             
@@ -97,7 +98,7 @@ class ChessGameViewModel: ObservableObject {
                     if let playerIDs = gameData["playerID"] as? [String] {
                         let currentCount = playerIDs.count
                         
-                        print("Số lượng playerID hiện tại: \(currentCount)")
+                        print("Current number of playerIDs: \(currentCount)")
                         
                         for (index, playerID) in playerIDs.enumerated() {
                             print("PlayerID \(index): \(playerID)")
@@ -121,18 +122,61 @@ class ChessGameViewModel: ObservableObject {
                                     if let error = error {
                                         print("Failed to remove whitePiece: \(error.localizedDescription)")
                                     } else {
-                                        print("whitePiece removed as only one player left in the game")
+                                        print("WhitePiece removed")
                                     }
                                 }
                             }
                         }
                     } else {
-                        print("Không có playerID nào trong game này.")
-                    }                    
+                        print("User not found or failed to fetch user data")
+                    }
+                    
+                    // Observe changes to pieceMoves in Firebase
+                    gameSnapshot.ref.child("pieceMoves").observe(.value, with: { [weak self] pieceMovesSnapshot in
+                        guard let self = self else { return }
+                        
+                        if let movesArray = pieceMovesSnapshot.value as? [[String: Any]] {
+                            // Convert the array of dictionaries to an array of MovesPieces
+                            let decodedMoves: [pieceMove] = movesArray.compactMap { dict in
+                                do {
+                                    let jsonData = try JSONSerialization.data(withJSONObject: dict)
+                                    return try JSONDecoder().decode(pieceMove.self, from: jsonData)
+                                } catch {
+                                    print("Error decoding pieceMove: \(error)")
+                                    return nil
+                                }
+                            }
+                            
+                            // Compare and update pieceMoves only if the decoded array is different
+                            if pieceMoves?.count != decodedMoves.count {
+                                pieceMoves = decodedMoves
+                                
+                                if let lastMove = self.pieceMoves?.last, lastMove.movedPiece == "Pawn" && lastMove.move.positionAfterMoved.X == 0 && lastMove.pawnPromoted == nil {
+                                    pieceMoves = []
+                                } else {
+                                    if (whiteTurn == true && playerColor != .white) || (whiteTurn == false && playerColor == .white) {
+                                        let lastMove = decodedMoves.last
+                                        self.movePiece(from: symmetry(position: (lastMove?.move.possition)!), to: symmetry(position: (lastMove?.move.positionAfterMoved)!), control: false)
+                                        
+                                        if lastMove?.pawnPromoted != nil {
+                                            promoteChoice = lastMove?.pawnPromoted
+                                            promote(pawn: getPiece(at: symmetry(position: (lastMove?.move.positionAfterMoved)!))!)
+                                        }
+                                    }
+                                    toggleTurn()
+                                }
+                            }
+                        }
+                    })
+                    
                     break
                 }
             }
         })
+    }
+    
+    func symmetry(position: Position) -> (Int, Int) {
+        return (7 - position.X, position.Y)
     }
     
     func getDeadPieces(color: PlayerColor) -> [ChessPiece?] {
@@ -169,7 +213,7 @@ class ChessGameViewModel: ObservableObject {
         board[0][4] = King(color: playerEColor, position: (0, 4))
     }
 
-    func movePiece(from start: (Int, Int), to end: (Int, Int)) {
+    func movePiece(from start: (Int, Int), to end: (Int, Int), control: Bool) {
         guard let piece = board[start.0][start.1] else { return }
         
         if let _ = board[end.0][end.1] {
@@ -186,14 +230,35 @@ class ChessGameViewModel: ObservableObject {
         board[start.0][start.1] = nil
         piece.position = end
         
-        if let pawn = piece as? Pawn {
-            if (pawn.color == .white && end.0 == 0) || (pawn.color == .black && end.0 == 7) {
-                pawnPromoted = pawn
-                promote = true
-            }
+        if let pawn = piece as? Pawn, end.0 == 0 && control {
+            pawnPromoted = pawn
+            promote = true
         }
         
-        toggleTurn()
+        if control {
+            // Save piece moved
+            if pieceMoves != nil {
+                pieceMoves?.append(getPieceMove(piece: piece, from: start, to: end))
+            } else {
+                pieceMoves = [getPieceMove(piece: piece, from: start, to: end)]
+            }
+            
+            MatchModel.saveMovePiece(pieceMoves: pieceMoves!, roomID: self.roomCode)
+            pieceMoves = []
+        }
+    }
+    
+    func getPieceMove(piece: ChessPiece, from start: (Int, Int), to end: (Int, Int)) -> pieceMove {
+        let startPosition = Position(X: start.0, Y: start.1)
+        let endPosition = Position(X: end.0, Y: end.1)
+        let move = Move(possition: startPosition, positionAfterMoved: endPosition)
+        
+        // Get piece color and type
+        let pieceColor = piece.color == .white ? "white" : "black"
+        let pieceType = String(describing: type(of: piece))
+        
+        // Create the MovesPieces object
+        return pieceMove(pieceColor: pieceColor, movedPiece: pieceType, move: move, pawnPromoted: promoteChoice)
     }
     
     func promote(pawn: ChessPiece) {
@@ -217,6 +282,8 @@ class ChessGameViewModel: ObservableObject {
         
         // Đặt quân cờ đã thăng cấp vào bàn cờ
         board[end.0][end.1] = chessPiecePromoted
+        MatchModel.promote(roomID: roomCode, promotedPiece: promoteChoice!)
+        
         promoteChoice = nil // Reset lựa chọn sau khi thăng cấp
         pawnPromoted = nil
     }

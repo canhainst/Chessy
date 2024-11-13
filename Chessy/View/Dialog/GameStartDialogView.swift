@@ -26,7 +26,7 @@ struct GameStartDialogView: View {
                         .font(.title)
                         .foregroundColor(.black)
 
-                    HStack {
+                    HStack (alignment: .top, spacing: 10) {
                         AvatarView(avatarLink: avatarE, width: 70, height: 70)
                         VStack (alignment: .leading, spacing: 10) {
                             Text(viewModel.playerE!.name)
