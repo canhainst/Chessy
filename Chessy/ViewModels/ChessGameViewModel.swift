@@ -117,6 +117,9 @@ class ChessGameViewModel: ObservableObject {
                             if currentCount == 1 {
                                 self?.playerEID = nil
                                 self?.playerE = nil
+                                self?.deadPieces = []
+                                self?.board = Array(repeating: Array(repeating: nil, count: 8), count: 8)
+                                self?.whiteTurn = nil
                                 
                                 gameSnapshot.ref.child("whitePiece").removeValue { error, _ in
                                     if let error = error {
@@ -156,6 +159,11 @@ class ChessGameViewModel: ObservableObject {
                                 } else {
                                     if (whiteTurn == true && playerColor != .white) || (whiteTurn == false && playerColor == .white) {
                                         let lastMove = decodedMoves.last
+                                        
+                                        if let deadPiece = getPiece(at: symmetry(position: (lastMove?.move.positionAfterMoved)!)) {
+                                            deadPieces.append(deadPiece)
+                                        }
+                                        
                                         self.movePiece(from: symmetry(position: (lastMove?.move.possition)!), to: symmetry(position: (lastMove?.move.positionAfterMoved)!), control: false)
                                         
                                         if lastMove?.pawnPromoted != nil {

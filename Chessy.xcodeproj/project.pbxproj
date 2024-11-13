@@ -163,12 +163,11 @@
 				8A4328C02CB3970A00B6A2A7 /* Dialog */,
 				8A2C2A912C15C0080058CA57 /* TabView */,
 				8A2C2A922C15C0380058CA57 /* Login + Register View */,
-				8A24CC1D2C0DD8B3003CF826 /* MainView.swift */,
+				8AB326FC2CE43D50005F2CD3 /* GamePlay */,
 				8AAA8D2E2C1D5FFC00BCF372 /* LottieView.swift */,
-				8A58870E2CB0D73F008FCBDC /* ChessBoardView.swift */,
 				8A39595D2C2680D900F7C3B3 /* SplashView.swift */,
 				8A580E362C26BFFF00C750B1 /* LoadingView.swift */,
-				8A5887082CB0C4E3008FCBDC /* GameplayView.swift */,
+				8A24CC1D2C0DD8B3003CF826 /* MainView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -263,6 +262,15 @@
 				8AAA8D302C1D604500BCF372 /* fire.json */,
 			);
 			path = Animation;
+			sourceTree = "<group>";
+		};
+		8AB326FC2CE43D50005F2CD3 /* GamePlay */ = {
+			isa = PBXGroup;
+			children = (
+				8A58870E2CB0D73F008FCBDC /* ChessBoardView.swift */,
+				8A5887082CB0C4E3008FCBDC /* GameplayView.swift */,
+			);
+			path = GamePlay;
 			sourceTree = "<group>";
 		};
 		8ABF76232C1B775A007639E5 /* Frameworks */ = {

@@ -14,11 +14,8 @@ struct ChessBoardView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Spacer() // Đẩy toàn bộ hàng xuống dưới
-            
             ForEach(0..<8) { row in
                 HStack(spacing: 0) {
-                    Spacer() // Đẩy các hình vuông vào giữa
                     ForEach(0..<8) { column in
                         ChessSquareView(viewModel: viewModel, piece: viewModel.getPiece(at: (row, column)),
                                         row: row,
@@ -28,12 +25,10 @@ struct ChessBoardView: View {
                                             pieceTapped(at: (row, column))
                                         })
                     }
-                    Spacer() // Đẩy các hình vuông vào giữa
                 }
             }
-            
-            Spacer() // Đẩy toàn bộ hàng lên trên
         }
+        .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
     }
 
     private func pieceTapped(at position: (Int, Int)) {

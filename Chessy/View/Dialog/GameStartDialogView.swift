@@ -12,6 +12,7 @@ struct GameStartDialogView: View {
     let viewModel: ChessGameViewModel
         
     @State private var countdown = 5
+    @State private var offsetY: CGFloat = 0
     @State var playerEtmp: String = ""
     @Environment(\.presentationMode) var presentationMode
     
@@ -36,7 +37,7 @@ struct GameStartDialogView: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
                                     .frame(width: 30)
-                                Text(" - \(viewModel.playerE!.region)")
+                                Text("- \(viewModel.playerE!.region)")
                                     .foregroundColor(.black)
                             }
                         }
@@ -55,10 +56,12 @@ struct GameStartDialogView: View {
                 .background(.white)
                 .cornerRadius(10)
                 .padding()
+                .offset(y: offsetY)
                 .onAppear {
                     startCountdown()
                 }
             }
+            .animation(.easeInOut(duration: 0.5), value: offsetY)
         }
     }
     
@@ -67,9 +70,16 @@ struct GameStartDialogView: View {
             MatchModel.setWhitePiece(roomID: viewModel.roomCode)
         }
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
-            if countdown > 0 {
+            if countdown > 1 {
+                countdown -= 1
+            } else if countdown == 1 {
+                // Start the exit animation when countdown reaches 1
+                withAnimation {
+                    offsetY = -UIScreen.main.bounds.height
+                }
                 countdown -= 1
             } else {
+                // When countdown reaches 0, invalidate timer and set player details
                 timer.invalidate()
                 playerEtmp = viewModel.playerEID!
                 viewModel.setPlayerColor(roomCode: viewModel.roomCode)

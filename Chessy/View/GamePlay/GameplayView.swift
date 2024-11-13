@@ -65,7 +65,7 @@ struct GameplayView: View {
                         .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
                                         
                         if !viewModel.deadPieces.isEmpty {
-                            getDeadPiecesImage(for: .white)
+                            getDeadPiecesImage(for: viewModel.playerColor! == .white ? .black : .white)
                         }
                         
                         Spacer()
@@ -81,7 +81,6 @@ struct GameplayView: View {
                 }
                 
                 ChessBoardView(viewModel: viewModel)
-                    .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
                     .onAppear {
                         viewModel.listenForGameChanges(roomCode: viewModel.roomCode)
                     }
@@ -93,11 +92,11 @@ struct GameplayView: View {
                         .foregroundColor((viewModel.whiteTurn! && viewModel.playerColor == .white) || (!viewModel.whiteTurn! && viewModel.playerColor == .black) ? .black : .clear)
                 }
                 
-                HStack (alignment: .top, spacing: 0) {
+                HStack (alignment: .top) {
                     Spacer()
                     
                     if !viewModel.deadPieces.isEmpty {
-                        getDeadPiecesImage(for: .black)
+                        getDeadPiecesImage(for: viewModel.playerColor!)
                     }
                     
                     HStack (alignment: .top) {
@@ -136,7 +135,7 @@ struct GameplayView: View {
     }
         
     func getDeadPiecesImage(for color: PlayerColor) -> some View {
-        let pieces = viewModel.deadPieces.compactMap { $0 }.filter { $0.color == color }
+        let pieces = viewModel.deadPieces.compactMap { $0 }.filter { $0.color != color }
         let chunkedPieces = pieces.chunked(into: 6)
         
         return VStack {
@@ -147,7 +146,7 @@ struct GameplayView: View {
                         Image(pieceSymbol(for: piece))
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 25)
+                            .frame(width: 20)
                     }
                 }
             }
