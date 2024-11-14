@@ -102,7 +102,7 @@ class ChessGameViewModel: ObservableObject {
                         
                         for (index, playerID) in playerIDs.enumerated() {
                             print("PlayerID \(index): \(playerID)")
-                            if currentCount == 2 {
+                            if currentCount == 2 && self?.playerE == nil {
                                 if playerID != self?.playerID {
                                     self?.playerEID = playerID
                                     User.getUserByID(userID: (self?.playerEID)!) { [weak self] user in
@@ -114,7 +114,7 @@ class ChessGameViewModel: ObservableObject {
                                     }
                                 }
                             }
-                            if currentCount == 1 {
+                            if currentCount == 1 && self?.playerE != nil{
                                 self?.playerEID = nil
                                 self?.playerE = nil
                                 self?.deadPieces = []
@@ -314,6 +314,41 @@ class ChessGameViewModel: ObservableObject {
                 rook.position = (row, 3)
             }
         }
+    }
+
+    func checkIfKingInDanger(boardgame: [[ChessPiece?]], kingColor: PlayerColor) -> (Int, Int)? {
+        // Tìm vị trí quân vua
+        guard let kingPosition = findKingPosition(board: boardgame, kingColor: kingColor) else {
+            return nil
+        }
+        
+        // Duyệt qua tất cả các ô trên bàn cờ
+        for row in 0..<boardgame.count {
+            for col in 0..<boardgame[row].count {
+                if let piece = boardgame[row][col], piece.color != kingColor {
+                    // Kiểm tra nếu quân đối thủ có thể di chuyển đến vị trí của vua
+                    let availableMoves = piece.possibleMoves(on: boardgame)
+                    if availableMoves.contains(where: {$0 == kingPosition}) {
+                        print(availableMoves)
+                        return (row, col) // Vị trí quân đối thủ gây nguy hiểm
+                    }
+                }
+            }
+        }
+        
+        // Nếu không có quân nào gây nguy hiểm cho vua
+        return nil
+    }
+
+    func findKingPosition(board: [[ChessPiece?]], kingColor: PlayerColor) -> (Int, Int)? {
+        for row in 0..<board.count {
+            for col in 0..<board[row].count {
+                if let piece = board[row][col], piece is King && piece.color == kingColor {
+                    return (row, col) // Vị trí quân vua
+                }
+            }
+        }
+        return nil
     }
 
     

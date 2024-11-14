@@ -80,10 +80,12 @@ struct GameplayView: View {
                     }
                 }
                 
+                Spacer()
                 ChessBoardView(viewModel: viewModel)
                     .onAppear {
                         viewModel.listenForGameChanges(roomCode: viewModel.roomCode)
                     }
+                Spacer()
                 
                 if viewModel.whiteTurn != nil {
                     Text("\(viewModel.player?.name ?? "")'s turn")

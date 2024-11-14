@@ -30,7 +30,7 @@ struct ChessyHomeView: View {
                 
                 Button {
                 } label: {
-                    Text("Find match")
+                    Text("Find match (Ranked)")
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding()

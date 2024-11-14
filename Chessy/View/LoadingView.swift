@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LoadingView: View {
     var body: some View {
-        LottieView(filename: "loading.json")
+        LottieView(filename: "loading.json", mode: 1)
             .frame(height: 150)
     }
 }

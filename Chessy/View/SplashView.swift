@@ -15,7 +15,7 @@ struct SplashView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: -20) {
-                LottieView(filename: "splash_anim.json")
+                LottieView(filename: "splash_anim.json", mode: 0)
                     .frame(height: 300)
 
                 Text("Chessy")

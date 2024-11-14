@@ -10,13 +10,21 @@ import Lottie
 
 struct LottieView: UIViewRepresentable {
     var filename: String
+    var mode: Int
 
     func makeUIView(context: Context) -> some UIView {
         let view = UIView(frame: .zero)
 
         let animationView = LottieAnimationView(name: filename)
         animationView.contentMode = .scaleAspectFit
-        animationView.loopMode = .loop
+        if mode == 0 {
+            animationView.loopMode = .playOnce
+        } else if mode == 1 {
+            animationView.loopMode = .loop
+        } else {
+            animationView.loopMode = .autoReverse
+        }
+        
         animationView.play()
 
         animationView.translatesAutoresizingMaskIntoConstraints = false
@@ -35,5 +43,5 @@ struct LottieView: UIViewRepresentable {
 
 
 #Preview {
-    LottieView(filename: "fire.json")
+    LottieView(filename: "fire.json", mode: 1)
 }

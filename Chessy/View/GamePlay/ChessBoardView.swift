@@ -11,6 +11,7 @@ struct ChessBoardView: View {
     @ObservedObject var viewModel: ChessGameViewModel
     @State private var selectedPiecePosition: (Int, Int)? // Lưu vị trí quân cờ được chọn
     @State private var availableMoves: [(Int, Int)] = [] // Lưu các ô có thể di chuyển
+    @State private var pieceDanger: [(Int, Int)] = []
 
     var body: some View {
         VStack(spacing: 0) {
@@ -20,6 +21,7 @@ struct ChessBoardView: View {
                         ChessSquareView(viewModel: viewModel, piece: viewModel.getPiece(at: (row, column)),
                                         row: row,
                                         column: column,
+                                        isDanger: pieceDanger.contains(where: {$0 == (row, column)}),
                                         isHighlighted: availableMoves.contains(where: { $0 == (row, column) }),
                                         onTap: {
                                             pieceTapped(at: (row, column))
@@ -46,16 +48,42 @@ struct ChessBoardView: View {
                     selectedPiecePosition = position
                     availableMoves = piece.possibleMoves(on: viewModel.board) // Lấy các ô có thể di chuyển
                 } else if let selected = selectedPiecePosition, (viewModel.whiteTurn! && piece.color == .black && availableMoves.contains(where: {$0 == position})) || (!viewModel.whiteTurn! && piece.color == .white && availableMoves.contains(where: {$0 == position})) {
-                    viewModel.movePiece(from: selected, to: position, control: true) // Di chuyển quân cờ
+                    
+                    var cloneBoard = viewModel.board
+                    let pieceTmp = viewModel.getPiece(at: selected)
+                    cloneBoard[position.0][position.1] = pieceTmp
+                    cloneBoard[selected.0][selected.1] = nil
+                    
+                    if let oppositePiece = viewModel.checkIfKingInDanger(boardgame: cloneBoard, kingColor: viewModel.playerColor!) {
+                        pieceDanger.append(oppositePiece)
+                        pieceDanger.append(viewModel.findKingPosition(board: viewModel.board, kingColor: viewModel.playerColor!)!)
+                    } else {
+                        pieceDanger = []
+                        
+                        viewModel.movePiece(from: selected, to: position, control: true) // Di chuyển quân cờ
+                        viewModel.deadPieces.append(piece)
+                    }
                     selectedPiecePosition = nil
                     availableMoves = [] // Reset các ô có thể di chuyển
-                    
-                    viewModel.deadPieces.append(piece)
                 }
             } else if let selected = selectedPiecePosition {
                 if availableMoves.contains(where: { $0 == position }) {
-                    // Nếu vị trí được chọn là một trong những ô có thể di chuyển
-                    viewModel.movePiece(from: selected, to: position, control: true) // Di chuyển quân cờ
+                    
+                    var cloneBoard = viewModel.board
+                    let pieceTmp = viewModel.getPiece(at: selected)
+                    cloneBoard[position.0][position.1] = pieceTmp
+                    cloneBoard[selected.0][selected.1] = nil
+                    
+                    if let oppositePiece = viewModel.checkIfKingInDanger(boardgame: cloneBoard, kingColor: viewModel.playerColor!) {
+                        pieceDanger.append(oppositePiece)
+                        pieceDanger.append(viewModel.findKingPosition(board: viewModel.board, kingColor: viewModel.playerColor!)!)
+                    } else {
+                        pieceDanger = []
+                        
+                        // Nếu vị trí được chọn là một trong những ô có thể di chuyển
+                        viewModel.movePiece(from: selected, to: position, control: true) // Di chuyển quân cờ
+                    }
+                    
                     selectedPiecePosition = nil
                     availableMoves = [] // Reset các ô có thể di chuyển
                 }
@@ -71,13 +99,14 @@ struct ChessSquareView: View {
     var piece: ChessPiece?
     var row: Int
     var column: Int
+    var isDanger: Bool
     var isHighlighted: Bool // Thêm thuộc tính này
     var onTap: () -> Void // Thêm closure để xử lý sự kiện tap
 
     var body: some View {
         ZStack {
             Rectangle()
-                .fill(isHighlighted ? Color.green : squareColor(forRow: row, column: column))
+                .fill(isHighlighted ? Color.green : (isDanger ? Color.red : squareColor(forRow: row, column: column)))
                 .frame(width: 45, height: 45)
                 .border(isHighlighted ? Color.black : Color.white, width: 0.2)
                 .onTapGesture {

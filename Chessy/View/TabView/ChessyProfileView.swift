@@ -161,10 +161,10 @@ struct ChessyProfileView: View {
                             .padding(.top, 5)
                         
                         if(user.achievement != ""){
-                            LottieView(filename: "fire.json")
+                            LottieView(filename: "fire.json", mode: 1)
                                 .frame(height: 70)
                         } else {
-                            LottieView(filename: "sad.json")
+                            LottieView(filename: "sad.json", mode: 1)
                                 .frame(height: 70)
                         }
                     }

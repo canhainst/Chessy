@@ -50,6 +50,10 @@
 		8AB326F52CDED524005F2CD3 /* GameStartDialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB326F42CDED524005F2CD3 /* GameStartDialogView.swift */; };
 		8AB326F72CDEEFA7005F2CD3 /* PromoteViewDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB326F62CDEEFA7005F2CD3 /* PromoteViewDialog.swift */; };
 		8AB326F92CDF02DB005F2CD3 /* InputRoomCodeViewDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB326F82CDF02DB005F2CD3 /* InputRoomCodeViewDialog.swift */; };
+		8AB326FE2CE57EF8005F2CD3 /* GameResultDialogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AB326FD2CE57EF7005F2CD3 /* GameResultDialogView.swift */; };
+		8AB327012CE5875D005F2CD3 /* win.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AB326FF2CE5875C005F2CD3 /* win.json */; };
+		8AB327022CE5875D005F2CD3 /* attack.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AB327002CE5875D005F2CD3 /* attack.json */; };
+		8AB327042CE5886C005F2CD3 /* shakehands.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AB327032CE5886C005F2CD3 /* shakehands.json */; };
 		8ABF76252C1B775A007639E5 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 8ABF76242C1B775A007639E5 /* FirebaseDatabase */; };
 		8ABF76272C1B87D2007639E5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8ABF76262C1B87D2007639E5 /* GoogleService-Info.plist */; };
 		8AD65AE82C1099F40046BEF0 /* RegisterViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD65AE72C1099F40046BEF0 /* RegisterViewViewModel.swift */; };
@@ -97,6 +101,10 @@
 		8AB326F42CDED524005F2CD3 /* GameStartDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStartDialogView.swift; sourceTree = "<group>"; };
 		8AB326F62CDEEFA7005F2CD3 /* PromoteViewDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromoteViewDialog.swift; sourceTree = "<group>"; };
 		8AB326F82CDF02DB005F2CD3 /* InputRoomCodeViewDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputRoomCodeViewDialog.swift; sourceTree = "<group>"; };
+		8AB326FD2CE57EF7005F2CD3 /* GameResultDialogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameResultDialogView.swift; sourceTree = "<group>"; };
+		8AB326FF2CE5875C005F2CD3 /* win.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = win.json; sourceTree = "<group>"; };
+		8AB327002CE5875D005F2CD3 /* attack.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = attack.json; sourceTree = "<group>"; };
+		8AB327032CE5886C005F2CD3 /* shakehands.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = shakehands.json; sourceTree = "<group>"; };
 		8ABF76262C1B87D2007639E5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8AD65AE72C1099F40046BEF0 /* RegisterViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewViewModel.swift; sourceTree = "<group>"; };
 		8AF4767D2C1649C100E5ABCB /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -236,6 +244,7 @@
 				8AB326F42CDED524005F2CD3 /* GameStartDialogView.swift */,
 				8AB326F62CDEEFA7005F2CD3 /* PromoteViewDialog.swift */,
 				8AB326F82CDF02DB005F2CD3 /* InputRoomCodeViewDialog.swift */,
+				8AB326FD2CE57EF7005F2CD3 /* GameResultDialogView.swift */,
 			);
 			path = Dialog;
 			sourceTree = "<group>";
@@ -256,6 +265,9 @@
 		8AA4034C2C1DB8B700E0AEE3 /* Animation */ = {
 			isa = PBXGroup;
 			children = (
+				8AB327032CE5886C005F2CD3 /* shakehands.json */,
+				8AB327002CE5875D005F2CD3 /* attack.json */,
+				8AB326FF2CE5875C005F2CD3 /* win.json */,
 				8A580E322C26BC9900C750B1 /* splash_anim.json */,
 				8AA4034A2C1DB8B200E0AEE3 /* sad.json */,
 				8A580E342C26BF2100C750B1 /* loading.json */,
@@ -355,9 +367,12 @@
 				8A24CC202C0DD8B9003CF826 /* Assets.xcassets in Resources */,
 				8AAA8D312C1D604500BCF372 /* fire.json in Resources */,
 				8A580E332C26BC9900C750B1 /* splash_anim.json in Resources */,
+				8AB327022CE5875D005F2CD3 /* attack.json in Resources */,
 				8A580E352C26BF2100C750B1 /* loading.json in Resources */,
 				8AA4034B2C1DB8B200E0AEE3 /* sad.json in Resources */,
+				8AB327012CE5875D005F2CD3 /* win.json in Resources */,
 				8ABF76272C1B87D2007639E5 /* GoogleService-Info.plist in Resources */,
+				8AB327042CE5886C005F2CD3 /* shakehands.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,6 +412,7 @@
 				8A24CC1C2C0DD8B3003CF826 /* ChessyApp.swift in Sources */,
 				8AA403502C1E06A200E0AEE3 /* ChartViewModel.swift in Sources */,
 				8A5887162CB0DFC6008FCBDC /* Knight.swift in Sources */,
+				8AB326FE2CE57EF8005F2CD3 /* GameResultDialogView.swift in Sources */,
 				8AB326F72CDEEFA7005F2CD3 /* PromoteViewDialog.swift in Sources */,
 				8AD65AE82C1099F40046BEF0 /* RegisterViewViewModel.swift in Sources */,
 				8A5887122CB0DFAB008FCBDC /* Pawn.swift in Sources */,
