@@ -49,13 +49,10 @@ struct ChessBoardView: View {
                     availableMoves = piece.possibleMoves(on: viewModel.board) // Lấy các ô có thể di chuyển
                 } else if let selected = selectedPiecePosition, (viewModel.whiteTurn! && piece.color == .black && availableMoves.contains(where: {$0 == position})) || (!viewModel.whiteTurn! && piece.color == .white && availableMoves.contains(where: {$0 == position})) {
                     
-                    var cloneBoard = viewModel.board
-                    let pieceTmp = viewModel.getPiece(at: selected)
-                    cloneBoard[position.0][position.1] = pieceTmp
-                    cloneBoard[selected.0][selected.1] = nil
+                    var cloneBoard = viewModel.simulatorMove(from: selected, to: position)
                     
-                    if let oppositePiece = viewModel.checkIfKingInDanger(boardgame: cloneBoard, kingColor: viewModel.playerColor!) {
-                        pieceDanger.append(oppositePiece)
+                    if let oppositePiece = viewModel.checkIfKingInDanger(boardgame: cloneBoard, kingColor: viewModel.playerColor!), !oppositePiece.isEmpty {
+                        pieceDanger = oppositePiece
                         pieceDanger.append(viewModel.findKingPosition(board: viewModel.board, kingColor: viewModel.playerColor!)!)
                     } else {
                         pieceDanger = []
@@ -69,13 +66,10 @@ struct ChessBoardView: View {
             } else if let selected = selectedPiecePosition {
                 if availableMoves.contains(where: { $0 == position }) {
                     
-                    var cloneBoard = viewModel.board
-                    let pieceTmp = viewModel.getPiece(at: selected)
-                    cloneBoard[position.0][position.1] = pieceTmp
-                    cloneBoard[selected.0][selected.1] = nil
+                    var cloneBoard = viewModel.simulatorMove(from: selected, to: position)
                     
-                    if let oppositePiece = viewModel.checkIfKingInDanger(boardgame: cloneBoard, kingColor: viewModel.playerColor!) {
-                        pieceDanger.append(oppositePiece)
+                    if let oppositePiece = viewModel.checkIfKingInDanger(boardgame: cloneBoard, kingColor: viewModel.playerColor!), !oppositePiece.isEmpty {
+                        pieceDanger = oppositePiece
                         pieceDanger.append(viewModel.findKingPosition(board: viewModel.board, kingColor: viewModel.playerColor!)!)
                     } else {
                         pieceDanger = []

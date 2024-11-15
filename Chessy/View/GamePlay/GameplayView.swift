@@ -133,6 +133,16 @@ struct GameplayView: View {
             if viewModel.promote {
                 PromoteViewDialog(viewModel: viewModel)
             }
+            
+            if viewModel.showResult {
+                if viewModel.winner == viewModel.playerID {
+                    GameResultDialogView(result: 1, showResult: $viewModel.showResult)
+                } else if viewModel.winner == viewModel.playerEID {
+                    GameResultDialogView(result: 0, showResult: $viewModel.showResult)
+                } else {
+                    GameResultDialogView(result: 2, showResult: $viewModel.showResult)
+                }
+            }
         }
     }
         

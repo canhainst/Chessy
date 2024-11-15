@@ -32,7 +32,7 @@ struct MatchModel: Codable {
     let roomID: String
     let playerID: [String?]
     var pieceMoves: [pieceMove?]
-    let playerWinID: String?
+    let winnerID: String?
     let host: String
     let whitePiece: String?
     
@@ -86,6 +86,29 @@ struct MatchModel: Codable {
                     print("Failed to update movesPieces: \(error.localizedDescription)")
                 } else {
                     print("movesPieces updated successfully in Firebase.")
+                }
+            }
+        }
+    }
+    
+    static func setWinner(roomID: String, winnerID: String) {
+        let db = Database.database().reference()
+        
+        // Tìm game có roomID được cung cấp
+        let query = db.child("games").queryOrdered(byChild: "roomID").queryEqual(toValue: roomID)
+        
+        query.observeSingleEvent(of: .value) { snapshot in
+            // Kiểm tra xem có dữ liệu không
+            guard let gameSnapshot = snapshot.children.allObjects.first as? DataSnapshot else {
+                print("Room ID not found.")
+                return
+            }
+            
+            gameSnapshot.ref.child("winnerID").setValue(winnerID) { error, _ in
+                if let error = error {
+                    print("Failed to set winnerID: \(error.localizedDescription)")
+                } else {
+                    print("Winner ID: \(winnerID)")
                 }
             }
         }

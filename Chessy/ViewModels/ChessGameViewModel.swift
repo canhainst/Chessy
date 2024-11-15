@@ -15,6 +15,9 @@ class ChessGameViewModel: ObservableObject {
     @Published var roomCode: String
     @Published var deadPieces: [ChessPiece?]
     
+    @Published var showResult: Bool = false
+    @Published var winner: String?
+    
     @Published var promote = false
     @Published var promoteChoice: String?
     @Published var pawnPromoted: ChessPiece?
@@ -31,12 +34,17 @@ class ChessGameViewModel: ObservableObject {
     @Published var isHost: Bool?
     
     @Published var pieceMoves: [pieceMove]?
+    @Published var previousPositions: [[[ChessPiece?]]]
+    @Published var moveCount: Int
         
     init() {
         self.board = Array(repeating: Array(repeating: nil, count: 8), count: 8)
         self.roomCode = ""
         self.deadPieces = []
         self.playerID = Auth.auth().currentUser!.uid
+        
+        self.moveCount = 0
+        self.previousPositions = []
                 
         User.getUserByID(userID: playerID) { [weak self] user in
             if let user = user {
@@ -120,6 +128,8 @@ class ChessGameViewModel: ObservableObject {
                                 self?.deadPieces = []
                                 self?.board = Array(repeating: Array(repeating: nil, count: 8), count: 8)
                                 self?.whiteTurn = nil
+                                self?.moveCount = 0
+                                self?.previousPositions = []
                                 
                                 gameSnapshot.ref.child("whitePiece").removeValue { error, _ in
                                     if let error = error {
@@ -162,6 +172,7 @@ class ChessGameViewModel: ObservableObject {
                                         
                                         if let deadPiece = getPiece(at: symmetry(position: (lastMove?.move.positionAfterMoved)!)) {
                                             deadPieces.append(deadPiece)
+                                            moveCount = 0
                                         }
                                         
                                         self.movePiece(from: symmetry(position: (lastMove?.move.possition)!), to: symmetry(position: (lastMove?.move.positionAfterMoved)!), control: false)
@@ -224,6 +235,9 @@ class ChessGameViewModel: ObservableObject {
     func movePiece(from start: (Int, Int), to end: (Int, Int), control: Bool) {
         guard let piece = board[start.0][start.1] else { return }
         
+        self.previousPositions.append(board)
+        self.moveCount += 1
+        
         if let _ = board[end.0][end.1] {
             board[end.0][end.1] = nil
         }
@@ -254,8 +268,160 @@ class ChessGameViewModel: ObservableObject {
             MatchModel.saveMovePiece(pieceMoves: pieceMoves!, roomID: self.roomCode)
             pieceMoves = []
         }
+        
+        if let result = checkGameAfterMove(board: board, moveCount: moveCount, previousPositions: previousPositions) {
+            winner = result
+            showResult = true
+            if isHost! {
+                MatchModel.setWinner(roomID: roomCode, winnerID: winner!)
+            }
+        }
     }
     
+    func checkGameAfterMove(board: [[ChessPiece?]], moveCount: Int, previousPositions: [[[ChessPiece?]]]) -> String? {
+        // 1. Kiểm tra xem có quân vua nào bị chiếu hết chưa
+        if let winner = checkForCheckmate(board: board) {
+            return winner // Trả về ID của người chơi thắng cuộc
+        }
+        
+        // 2. Kiểm tra điều kiện hòa do bí nước (Stalemate)
+        if isStalemate(board: board) {
+            return "draw"
+        }
+        
+        // 3. Kiểm tra điều kiện hòa do thiếu quân (Insufficient Material)
+        if isInsufficientMaterial(board: board) {
+            return "draw"
+        }
+        
+        // 4. Kiểm tra điều kiện hòa 50 nước không ăn quân
+        if moveCount >= 50 {
+            return "draw"
+        }
+        
+        // 5. Kiểm tra điều kiện hòa do lặp lại thế cờ ba lần
+        if isThreefoldRepetition(board: board, previousPositions: previousPositions) {
+            return "draw"
+        }
+        
+        // Nếu không có ai thắng hoặc hòa, trò chơi tiếp tục
+        return nil
+    }
+    
+    func checkForCheckmate(board: [[ChessPiece?]]) -> String? {
+        if let oppositePiece = checkIfKingInDanger(boardgame: board, kingColor: .white), !oppositePiece.isEmpty && !canKingEscapeCheck(color: .white, board: board) {
+            return playerColor == .black ? playerID : playerEID
+        }
+        
+        if let oppositePiece = checkIfKingInDanger(boardgame: board, kingColor: .black), !oppositePiece.isEmpty && !canKingEscapeCheck(color: .black, board: board) {
+            return playerColor == .white ? playerID : playerEID
+        }
+        
+        return nil
+    }
+    
+    func canKingEscapeCheck(color: PlayerColor, board: [[ChessPiece?]]) -> Bool {
+        for row in 0..<8 {
+            for col in 0..<8 {
+                if let piece = board[row][col], piece.color == color {
+                    let possibleMoves = piece.possibleMoves(on: board)
+                    for move in possibleMoves {
+                        let simulatorMove = simulatorMove(from: piece.position, to: move)
+                        if let oppositePiece = checkIfKingInDanger(boardgame: simulatorMove, kingColor: color), oppositePiece.isEmpty {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
+    func simulatorMove(from start: (Int, Int), to end: (Int, Int)) -> [[ChessPiece?]] {
+        var cloneBoard = board
+        let pieceTmp = getPiece(at: start)
+        cloneBoard[end.0][end.1] = pieceTmp
+        cloneBoard[start.0][start.1] = nil
+        
+        return cloneBoard
+    }
+    
+    func isStalemate(board: [[ChessPiece?]]) -> Bool {
+        if let oppositePiece = checkIfKingInDanger(boardgame: board, kingColor: .white), oppositePiece.isEmpty && !canKingEscapeCheck(color: .white, board: board) {
+            return true
+        }
+        
+        if let oppositePiece = checkIfKingInDanger(boardgame: board, kingColor: .black), oppositePiece.isEmpty && !canKingEscapeCheck(color: .black, board: board) {
+            return true
+        }
+        
+        return false
+    }
+    
+    func isInsufficientMaterial(board: [[ChessPiece?]]) -> Bool {
+        var whitePieces = [ChessPiece]()
+        var blackPieces = [ChessPiece]()
+        
+        for row in board {
+            for piece in row {
+                if let piece = piece {
+                    if piece.color == .white {
+                        whitePieces.append(piece)
+                    } else {
+                        blackPieces.append(piece)
+                    }
+                }
+            }
+        }
+        
+        if whitePieces.count == 2 && blackPieces.count == 2 {
+            let whiteBishops = whitePieces.compactMap { $0 as? Bishop }
+            let blackBishops = blackPieces.compactMap { $0 as? Bishop }
+            
+            if whiteBishops.count == 1 && blackBishops.count == 1 {
+                let whiteBishopSquareColor = (whiteBishops[0].position.0 + whiteBishops[0].position.1) % 2
+                let blackBishopSquareColor = (blackBishops[0].position.0 + blackBishops[0].position.1) % 2
+                
+                // If both bishops are on the same color squares, it's insufficient material
+                if whiteBishopSquareColor == blackBishopSquareColor {
+                    return true //King and bishop vs king and bishop of the same coloured square.
+                }
+            }
+        }
+        
+        return (whitePieces.count == 1 && blackPieces.count == 1) || // Chỉ còn hai vua
+               (whitePieces.count == 1 && blackPieces.count == 2 && blackPieces.allSatisfy { $0 is Bishop || $0 is Knight || $0 is King }) || // Vua và một mã hoặc tượng
+               (blackPieces.count == 1 && blackPieces.count == 2 && whitePieces.allSatisfy { $0 is Bishop || $0 is Knight || $0 is King }) // Tương tự cho đen
+    }
+
+    func boardHash(_ board: [[ChessPiece?]]) -> String {
+        var hash = ""
+        for row in board {
+            for piece in row {
+                if let piece = piece {
+                    hash += "\(piece.color == .white ? "W" : "B")\(piece.self)" // Include color and piece type
+                    hash += "\(piece.position.0),\(piece.position.1);"          // Include piece position
+                } else {
+                    hash += "empty;"
+                }
+            }
+        }
+        return hash
+    }
+
+    func isThreefoldRepetition(board: [[ChessPiece?]], previousPositions: [[[ChessPiece?]]]) -> Bool {
+        let currentHash = boardHash(board)
+        var repetitionCount = 0
+        
+        for position in previousPositions {
+            if boardHash(position) == currentHash {
+                repetitionCount += 1
+            }
+        }
+        
+        return repetitionCount >= 3
+    }
+
     func getPieceMove(piece: ChessPiece, from start: (Int, Int), to end: (Int, Int)) -> pieceMove {
         let startPosition = Position(X: start.0, Y: start.1)
         let endPosition = Position(X: end.0, Y: end.1)
@@ -316,11 +482,13 @@ class ChessGameViewModel: ObservableObject {
         }
     }
 
-    func checkIfKingInDanger(boardgame: [[ChessPiece?]], kingColor: PlayerColor) -> (Int, Int)? {
+    func checkIfKingInDanger(boardgame: [[ChessPiece?]], kingColor: PlayerColor) -> [(Int, Int)]? {
         // Tìm vị trí quân vua
         guard let kingPosition = findKingPosition(board: boardgame, kingColor: kingColor) else {
             return nil
         }
+        
+        var oppositeDanger: [(Int, Int)] = []
         
         // Duyệt qua tất cả các ô trên bàn cờ
         for row in 0..<boardgame.count {
@@ -329,15 +497,13 @@ class ChessGameViewModel: ObservableObject {
                     // Kiểm tra nếu quân đối thủ có thể di chuyển đến vị trí của vua
                     let availableMoves = piece.possibleMoves(on: boardgame)
                     if availableMoves.contains(where: {$0 == kingPosition}) {
-                        print(availableMoves)
-                        return (row, col) // Vị trí quân đối thủ gây nguy hiểm
+                        oppositeDanger.append((row, col))
                     }
                 }
             }
         }
         
-        // Nếu không có quân nào gây nguy hiểm cho vua
-        return nil
+        return oppositeDanger
     }
 
     func findKingPosition(board: [[ChessPiece?]], kingColor: PlayerColor) -> (Int, Int)? {
