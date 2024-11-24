@@ -17,6 +17,7 @@ class ChessGameViewModel: ObservableObject {
     
     @Published var showResult: Bool = false
     @Published var winner: String?
+    @Published var rematchMsg: String = "Rematch (0/2)"
     
     @Published var promote = false
     @Published var promoteChoice: String?
@@ -103,6 +104,26 @@ class ChessGameViewModel: ObservableObject {
                         self?.isHost = (self?.playerID == host)
                     }
                     
+                    if let rematch = gameData["rematch"] as? [Bool] {
+                        if rematch.count == 1 {
+                            self!.rematchMsg = "Rematch (1/2)"
+                        }
+                        
+                        if rematch.count == 2 {
+                            self!.resetGame()
+                            gameSnapshot.ref.child("rematch").removeValue { error, _ in
+                                if let error = error {
+                                    print("Failed to remove rematch")
+                                } else {
+                                    print("Rematch removed")
+                                }
+                            }
+                            self!.showResult.toggle()
+                            self?.playerColor = (self?.playerColor == .white ? .black : .white)
+                            self?.setupBoard()
+                        }
+                    }
+                    
                     if let playerIDs = gameData["playerID"] as? [String] {
                         let currentCount = playerIDs.count
                         
@@ -136,6 +157,13 @@ class ChessGameViewModel: ObservableObject {
                                         print("Failed to remove whitePiece: \(error.localizedDescription)")
                                     } else {
                                         print("WhitePiece removed")
+                                    }
+                                }
+                                gameSnapshot.ref.child("rematch").removeValue { error, _ in
+                                    if let error = error {
+                                        print("Failed to remove rematch")
+                                    } else {
+                                        print("Rematch removed")
                                     }
                                 }
                             }
@@ -200,6 +228,10 @@ class ChessGameViewModel: ObservableObject {
     
     func getDeadPieces(color: PlayerColor) -> [ChessPiece?] {
         return deadPieces.filter { $0?.color == color }
+    }
+    
+    private func clearBoard() {
+        board = Array(repeating: Array(repeating: nil, count: 8), count: 8)
     }
     
     private func setupBoard() {
@@ -274,6 +306,8 @@ class ChessGameViewModel: ObservableObject {
             showResult = true
             if isHost! {
                 MatchModel.setWinner(roomID: roomCode, winnerID: winner!)
+                MatchModel.saveGame(gameID: UUID(), playerIDs: [playerID, playerEID!], winnerID: winner!, historyPoint: [(playerID, 0), (playerID, 0)])
+                MatchModel.deleteGame(roomID: roomCode)
             }
         }
     }
@@ -527,6 +561,10 @@ class ChessGameViewModel: ObservableObject {
     }
     
     func resetGame() {
-        setupBoard()
+        clearBoard()
+        self.whiteTurn = true
+        self.deadPieces = []
+        self.moveCount = 0
+        self.previousPositions = []
     }
 }

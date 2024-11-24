@@ -6,12 +6,17 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct GameResultDialogView: View {
     let result: Int
-
+    let roomID: String
     @Binding var showResult: Bool
+    @Binding var rematchMsg: String
+    
     @State private var opacity: Double = 0.0
+    @State var onClick: Bool = false
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         if showResult {
@@ -61,14 +66,30 @@ struct GameResultDialogView: View {
                         }
                         
                         Button {
-                            showResult = false
+                            MatchModel.rematch(roomID: roomID)
+                            onClick.toggle()
                         } label: {
-                            Text("New Game")
+                            Text(rematchMsg)
                                 .font(.headline)
-                                .foregroundColor(.white)
+                                .foregroundColor(onClick ? .black : .white)
                                 .padding()
                                 .frame(width: 300, height: 50)
-                                .background(Color.blue)
+                                .background(onClick ? Color.gray : Color.blue)
+                                .cornerRadius(10)
+                        }
+                        .disabled(onClick)
+                        
+                        Button {
+                            showResult.toggle()
+                            presentationMode.wrappedValue.dismiss()
+                            MatchModel.exitGame(playerID: Auth.auth().currentUser!.uid, roomID: roomID)
+                        } label: {
+                            Text("Left the room")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .padding()
+                                .frame(width: 300, height: 50)
+                                .background(Color.gray)
                                 .cornerRadius(10)
                         }
                     }
@@ -86,7 +107,7 @@ struct GameResultDialogView: View {
                 }
             }
         }
-        }
+    }
 }
 
 struct FadeInTextView: View {

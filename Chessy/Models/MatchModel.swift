@@ -35,6 +35,82 @@ struct MatchModel: Codable {
     let winnerID: String?
     let host: String
     let whitePiece: String?
+    let rematch: [Bool]?
+    
+    static func deleteGame(roomID: String){
+        let db = Database.database().reference()
+        let query = db.child("games").queryOrdered(byChild: "roomID").queryEqual(toValue: roomID)
+        
+        query.observeSingleEvent(of: .value) { snapshot in
+            guard let gameSnapshot = snapshot.children.allObjects.first as? DataSnapshot else {
+                print("Error: Could not find game with roomID \(roomID).")
+                return
+            }
+            
+            gameSnapshot.ref.updateChildValues([
+                "pieceMoves": NSNull(),
+                "winnerID": NSNull(),
+                "whitePiece": NSNull()
+            ]) { error, _ in
+                if let error = error {
+                    print("Error updating game fields: \(error.localizedDescription)")
+                } else {
+                    print("Successfully deleted fields from game with roomID \(roomID).")
+                }
+            }
+        }
+    }
+    
+    static func saveGame(gameID: UUID, playerIDs: [String], winnerID: String, historyPoint: [(String, Int)]){
+        let db = Database.database().reference().child("GamePlayed")
+        
+        let gameData: [String: Any] = [
+            "playerID": playerIDs,
+            "winnerID": winnerID,
+            "historyPoint": historyPoint.map { ["playerID": $0.0, "points": $0.1] },
+            "timestamp": Date().timeIntervalSince1970
+        ]
+        
+        db.child(gameID.uuidString).setValue(gameData) { error, _ in
+            if let error = error {
+                print("Error saving game: \(error.localizedDescription)")
+            } else {
+                print("Game saved successfully.")
+            }
+        }
+    }
+    
+    static func rematch(roomID: String) {
+        let db = Database.database().reference()
+        let query = db.child("games").queryOrdered(byChild: "roomID").queryEqual(toValue: roomID)
+        
+        query.observeSingleEvent(of: .value) { snapshot in
+            guard let gameSnapshot = snapshot.children.allObjects.first as? DataSnapshot else {
+                print("Error: Could not find game with roomID \(roomID).")
+                return
+            }
+            
+            gameSnapshot.ref.child("rematch").observeSingleEvent(of: .value) { rematchSnapshot in
+                var rematchArray: [Bool] = []
+                
+                if let existingRematch = rematchSnapshot.value as? [Bool] {
+                    rematchArray = existingRematch
+                }
+                
+                // Thêm `true` vào mảng rematch
+                rematchArray.append(true)
+                
+                // Cập nhật lại giá trị vào Firebase
+                gameSnapshot.ref.updateChildValues(["rematch": rematchArray]) { error, _ in
+                    if let error = error {
+                        print("Error updating rematch: \(error.localizedDescription)")
+                    } else {
+                        print("Successfully added true to rematch for roomID \(roomID).")
+                    }
+                }
+            }
+        }
+    }
     
     static func promote(roomID: String, promotedPiece: String) {
         let db = Database.database().reference()
@@ -114,7 +190,7 @@ struct MatchModel: Codable {
         }
     }
     
-    static func setWhitePiece(roomID: String) {
+    static func setWhitePiece(roomID: String){
         let db = Database.database().reference()
         
         // Tìm game có roomID được cung cấp

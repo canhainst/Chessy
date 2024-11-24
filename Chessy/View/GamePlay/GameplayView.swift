@@ -136,11 +136,11 @@ struct GameplayView: View {
             
             if viewModel.showResult {
                 if viewModel.winner == viewModel.playerID {
-                    GameResultDialogView(result: 1, showResult: $viewModel.showResult)
+                    GameResultDialogView(result: 1, roomID: viewModel.roomCode, showResult: $viewModel.showResult, rematchMsg: $viewModel.rematchMsg)
                 } else if viewModel.winner == viewModel.playerEID {
-                    GameResultDialogView(result: 0, showResult: $viewModel.showResult)
-                } else {
-                    GameResultDialogView(result: 2, showResult: $viewModel.showResult)
+                    GameResultDialogView(result: 0, roomID: viewModel.roomCode, showResult: $viewModel.showResult, rematchMsg: $viewModel.rematchMsg)
+                } else if viewModel.winner == "draw" {
+                    GameResultDialogView(result: 2, roomID: viewModel.roomCode, showResult: $viewModel.showResult, rematchMsg: $viewModel.rematchMsg)
                 }
             }
         }
