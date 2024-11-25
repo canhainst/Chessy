@@ -33,7 +33,7 @@ struct GameStartDialogView: View {
                             Text(viewModel.playerE!.name)
                                 .foregroundColor(.black)
                             HStack {
-                                Image("VN")
+                                Image(viewModel.playerE!.nation)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
                                     .frame(width: 30)

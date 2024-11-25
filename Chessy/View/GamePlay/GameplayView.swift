@@ -51,7 +51,7 @@ struct GameplayView: View {
                                 Text(viewModel.playerE!.name)
                                     .foregroundColor(.black)
                                 HStack {
-                                    Image("VN")
+                                    Image(viewModel.playerE!.nation)
                                         .resizable()
                                         .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
                                         .frame(width: 30)
@@ -108,7 +108,7 @@ struct GameplayView: View {
                             HStack {
                                 Text(viewModel.isHost == true ? "(Host)" : "")
                                     .foregroundColor(.black)
-                                Image("VN")
+                                Image(viewModel.player!.nation)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
                                     .frame(width: 30)

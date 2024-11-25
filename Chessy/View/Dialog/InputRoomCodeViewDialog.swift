@@ -49,7 +49,7 @@ struct InputRoomCodeViewDialog: View {
                     
                     HStack {
                         Button {
-                            let newMatch = MatchModel(gameID: UUID(), roomID: viewModel.roomCode, playerID: [currentUserID, nil], pieceMoves: [], winnerID: nil, host: currentUserID, whitePiece: nil, rematch: nil)
+                            let newMatch = MatchModel(gameID: UUID(), roomID: viewModel.roomCode, playerID: [currentUserID, nil], pieceMoves: [], winnerID: nil, host: currentUserID, whitePiece: nil, rematch: nil, type: "Normal")
                             
                             MatchModel.insertNewGame(matchModel: newMatch) { success in
                                 if success {

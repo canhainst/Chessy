@@ -56,6 +56,10 @@ class ChessGameViewModel: ObservableObject {
         }
     }
     
+    func getGameType() -> String {
+        return self.roomCode.allSatisfy{$0.isNumber} ? "Normal" : "Rank"
+    }
+    
     func setPlayerColor(roomCode: String) {
         let db = Database.database().reference()
             
@@ -112,7 +116,7 @@ class ChessGameViewModel: ObservableObject {
                         if rematch.count == 2 {
                             self!.resetGame()
                             gameSnapshot.ref.child("rematch").removeValue { error, _ in
-                                if let error = error {
+                                if error != nil {
                                     print("Failed to remove rematch")
                                 } else {
                                     print("Rematch removed")
@@ -160,7 +164,7 @@ class ChessGameViewModel: ObservableObject {
                                     }
                                 }
                                 gameSnapshot.ref.child("rematch").removeValue { error, _ in
-                                    if let error = error {
+                                    if error != nil {
                                         print("Failed to remove rematch")
                                     } else {
                                         print("Rematch removed")
@@ -306,7 +310,13 @@ class ChessGameViewModel: ObservableObject {
             showResult = true
             if isHost! {
                 MatchModel.setWinner(roomID: roomCode, winnerID: winner!)
-                MatchModel.saveGame(gameID: UUID(), playerIDs: [playerID, playerEID!], winnerID: winner!, historyPoint: [(playerID, 0), (playerID, 0)])
+                MatchHistoryModel.saveGame(
+                    gameID: UUID(),
+                    playerIDs: [playerID, playerEID!],
+                    winnerID: winner!,
+                    historyPoint: [HistoryPoint(playerID: playerID, point: 0), HistoryPoint(playerID: playerEID!, point: 0)], 
+                    type: getGameType()
+                )
                 MatchModel.deleteGame(roomID: roomCode)
             }
         }

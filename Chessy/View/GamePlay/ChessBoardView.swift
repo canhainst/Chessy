@@ -49,7 +49,7 @@ struct ChessBoardView: View {
                     availableMoves = piece.possibleMoves(on: viewModel.board) // Lấy các ô có thể di chuyển
                 } else if let selected = selectedPiecePosition, (viewModel.whiteTurn! && piece.color == .black && availableMoves.contains(where: {$0 == position})) || (!viewModel.whiteTurn! && piece.color == .white && availableMoves.contains(where: {$0 == position})) {
                     
-                    var cloneBoard = viewModel.simulatorMove(from: selected, to: position)
+                    let cloneBoard = viewModel.simulatorMove(from: selected, to: position)
                     
                     if let oppositePiece = viewModel.checkIfKingInDanger(boardgame: cloneBoard, kingColor: viewModel.playerColor!), !oppositePiece.isEmpty {
                         pieceDanger = oppositePiece
@@ -66,7 +66,7 @@ struct ChessBoardView: View {
             } else if let selected = selectedPiecePosition {
                 if availableMoves.contains(where: { $0 == position }) {
                     
-                    var cloneBoard = viewModel.simulatorMove(from: selected, to: position)
+                    let cloneBoard = viewModel.simulatorMove(from: selected, to: position)
                     
                     if let oppositePiece = viewModel.checkIfKingInDanger(boardgame: cloneBoard, kingColor: viewModel.playerColor!), !oppositePiece.isEmpty {
                         pieceDanger = oppositePiece

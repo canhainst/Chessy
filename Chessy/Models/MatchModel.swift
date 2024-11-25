@@ -36,6 +36,7 @@ struct MatchModel: Codable {
     let host: String
     let whitePiece: String?
     let rematch: [Bool]?
+    let type: String
     
     static func deleteGame(roomID: String){
         let db = Database.database().reference()
@@ -57,25 +58,6 @@ struct MatchModel: Codable {
                 } else {
                     print("Successfully deleted fields from game with roomID \(roomID).")
                 }
-            }
-        }
-    }
-    
-    static func saveGame(gameID: UUID, playerIDs: [String], winnerID: String, historyPoint: [(String, Int)]){
-        let db = Database.database().reference().child("GamePlayed")
-        
-        let gameData: [String: Any] = [
-            "playerID": playerIDs,
-            "winnerID": winnerID,
-            "historyPoint": historyPoint.map { ["playerID": $0.0, "points": $0.1] },
-            "timestamp": Date().timeIntervalSince1970
-        ]
-        
-        db.child(gameID.uuidString).setValue(gameData) { error, _ in
-            if let error = error {
-                print("Error saving game: \(error.localizedDescription)")
-            } else {
-                print("Game saved successfully.")
             }
         }
     }
@@ -361,5 +343,93 @@ struct MatchModel: Codable {
                 }
             }
         }
+    }
+}
+
+struct HistoryPoint: Codable {
+    let playerID: String
+    let point: Int
+}
+
+struct MatchHistoryModel: Codable {
+    let id: UUID
+    let playerIDs: [String]
+    let winnerID: String
+    let historyPoint: [HistoryPoint]
+    let type: String
+    let timestamp: Double
+    
+    static func saveGame(gameID: UUID, playerIDs: [String], winnerID: String, historyPoint: [HistoryPoint], type: String){
+        let db = Database.database().reference().child("GamePlayed")
+        
+        let gameData: [String: Any] = [
+            "playerID": playerIDs,
+            "winnerID": winnerID,
+            "historyPoint": historyPoint.map { ["playerID": $0.playerID, "points": $0.point] },
+            "type": type,
+            "timestamp": Date().timeIntervalSince1970
+        ]
+        
+        db.child(gameID.uuidString).setValue(gameData) { error, _ in
+            if let error = error {
+                print("Error saving game: \(error.localizedDescription)")
+            } else {
+                print("Game saved successfully.")
+            }
+        }
+    }
+    
+    static func getAllMatchHistoryByID(playerID: String, completion: @escaping ([MatchHistoryModel]) -> Void) {
+        let db = Database.database().reference().child("GamePlayed")
+        
+        db.observeSingleEvent(of: .value, with: { snapshot in
+            // Kiểm tra dữ liệu trả về
+            guard let data = snapshot.value as? [String: Any] else {
+                completion([]) // Trả về danh sách rỗng nếu không có dữ liệu
+                return
+            }
+            
+            var matchHistoryList: [MatchHistoryModel] = []
+            
+            // Duyệt qua tất cả các game
+            for (gameID, value) in data {
+                if let gameData = value as? [String: Any],
+                   let playerIDs = gameData["playerID"] as? [String],
+                   let historyPointData = gameData["historyPoint"] as? [[String: Any]],
+                   let winnerID = gameData["winnerID"] as? String,
+                   let type = gameData["type"] as? String,
+                   let timestamp = gameData["timestamp"] as? Double,
+                   playerIDs.contains(playerID) {
+                    
+                    // Chuyển đổi dữ liệu historyPoint thành mảng [historyPoint]
+                    let historyPoints = historyPointData.compactMap { history -> HistoryPoint? in
+                        if let playerID = history["playerID"] as? String,
+                           let points = history["points"] as? Int {
+                            return HistoryPoint(playerID: playerID, point: points)
+                        }
+                        return nil
+                    }
+                    
+                    // Khởi tạo đối tượng MatchHistoryModel
+                    let matchHistory = MatchHistoryModel(
+                        id: UUID(uuidString: gameID) ?? UUID(),
+                        playerIDs: playerIDs,
+                        winnerID: winnerID,
+                        historyPoint: historyPoints,
+                        type: type,
+                        timestamp: timestamp
+                    )
+                    
+                    matchHistoryList.append(matchHistory)
+                }
+            }
+            
+            // Trả về danh sách các trận đấu
+            completion(matchHistoryList)
+        }, withCancel: { error in
+            // Xử lý lỗi khi có sự cố trong việc lấy dữ liệu
+            print("Error fetching data: \(error.localizedDescription)")
+            completion([])  // Trả về danh sách rỗng nếu có lỗi
+        })
     }
 }

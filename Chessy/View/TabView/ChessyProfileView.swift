@@ -8,179 +8,240 @@
 import SwiftUI
 
 struct ChessyProfileView: View {
-    var currentUserID: String
+    let currentUserID: String
     
     @StateObject var ViewModel = LoginViewViewModel()
     @StateObject var profile = ProfileViewModel()
-    @Environment(\.colorScheme) var colorScheme
-    
+
     @State private var avatar = "https://scontent.fsgn5-14.fna.fbcdn.net/v/t39.30808-6/329403231_474295524745893_3398994404525045455_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=a2CuVbMC_7sQ7kNvgF1OdR8&_nc_ht=scontent.fsgn5-14.fna&_nc_gid=Aj_52EeNMyhMviAl6CaI-Ob&oh=00_AYDRSPuFYsO-3jbvdVzrQZvgba2QD_I1GA56n0AQOlbnHA&oe=67051EAD"
     
     var body: some View {
-        VStack {
+        ScrollView {
             if profile.isLoading {
                 LoadingView()
             } else if let user = profile.user {
-                HStack {
-                    AvatarView(avatarLink: avatar, width: 100, height: 100)
-                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                        .padding(.leading, 20)
-                    
-                    Button {
-                        ViewModel.logout()
-                    } label: {
-                        VStack {
-                            Image(systemName: "rectangle.portrait.and.arrow.right")
-                                .font(.title)
-                        }
-                        .foregroundColor(colorScheme == .light ? .black : .white)
-                    }
-                    .padding(.trailing, 20)
-                }
-                
-                HStack (spacing: 20) {
-                    Text(user.name)
-                    Text("-")
-                    Text(user.region)
-                }
-                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 20)
-                .font(.system(size: 25))
-                
-                HStack {
-                    Text(user.setRank())
-                        
-                    Circle()
-                        .fill(colorScheme == .light ? Color.black : Color.white)
-                        .frame(width: 10, height: 10)
-                    
-                    Text("Join in \(user.joinDateFormatted())")
-                        .foregroundColor(Color.gray)
-                }
-                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 20)
-                .font(.system(size: 20))
-                
-                HStack (spacing: 20) {
-                    VStack {
-                        Text("\(user.countFollowing())")
-                        Text("Following")
-                    }
-                    
-                    Divider()
-                        .frame(width: 1, height: 60)
-                    
-                    VStack {
-                        Text("\(user.countFollower())")
-                        Text("Follower")
-                    }
-                }
-                .padding(.top, 10)
-                GeometryReader { geometry in
-                    VStack {
-                        Text("Overview")
-                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                            .padding(.leading, 20)
-                            .font(.system(size: 25))
-                        HStack {
-                            VStack {
-                                Text("Total matches")
-                                Text("\(user.totalMatches)")
-                                    .font(.system(size: 25))
-                                    .fontWeight(.bold)
-                            }
-                            .padding()
-                            .frame(width: geometry.size.width * 0.45)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.gray, lineWidth: 2)
-                            )
-                            .padding(.leading, geometry.size.width * 0.01)
-                            
-                            VStack {
-                                Text("Winrate")
-                                Text("\(user.Winrate())%")
-                                    .font(.system(size: 25))
-                                    .fontWeight(.bold)
-                            }
-                            .padding()
-                            .frame(width: geometry.size.width * 0.45)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.gray, lineWidth: 2)
-                            )
-                        }
-                        .font(.system(size: 20))
-                        
-                        HStack {
-                            VStack {
-                                Text("Win streak")
-                                Text("\(user.winStreak)")
-                                    .font(.system(size: 25))
-                                    .fontWeight(.bold)
-                            }
-                            .padding()
-                            .frame(width: geometry.size.width * 0.45)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.gray, lineWidth: 2)
-                            )
-                            .padding(.leading, geometry.size.width * 0.01)
-                            
-                            VStack {
-                                Text("Peak")
-                                if(user.peak == 0){
-                                    Text("--")
-                                        .font(.system(size: 25))
-                                        .fontWeight(.bold)
-                                        .foregroundColor(colorScheme == .light ? .black : .white)
-                                } else {
-                                    Text("\(user.peak)")
-                                        .font(.system(size: 25))
-                                        .fontWeight(.bold)
-                                        .foregroundColor(user.peak <= 100 ? (user.peak <= 10 ? Color.red: Color.orange) : (colorScheme == .light ? .black : .white))
-                                }
-                            }
-                            .padding()
-                            .frame(width: geometry.size.width * 0.45)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.gray, lineWidth: 2)
-                            )
-                        }
-                        .font(.system(size: 20))
-                        
-                        Text("Achievement")
-                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                            .padding(.leading, 20)
-                            .font(.system(size: 25))
-                            .padding(.top, 20)
-                        
-                        Text("\(user.achievement != "" ? user.achievement : "You haven't achieved any titles yet")")
-                            .font(.system(size: 20))
-                            .padding(.top, 5)
-                        
-                        if(user.achievement != ""){
-                            LottieView(filename: "fire.json", mode: 1)
-                                .frame(height: 70)
-                        } else {
-                            LottieView(filename: "sad.json", mode: 1)
-                                .frame(height: 70)
-                        }
-                    }
-                }
+                ProfileView(currentUserID: currentUserID, user: user, avatar: avatar, ViewModel: ViewModel, profile: profile)
             } else if let errorMessage = profile.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
             } else {
                 Text("No user data available.")
             }
-            Spacer()
         }
-        .onAppear {
-            profile.fetchUser(userID: currentUserID)
+        .onAppear{
+            profile.fetchMatchHistory()
+            profile.fetchUser()
         }
-        .padding(.top, 10)
+    }
+}
+
+struct ProfileView: View {
+    let currentUserID: String
+    let user: User
+    let avatar: String
+    let ViewModel: LoginViewViewModel
+    let profile: ProfileViewModel
+    
+    @State private var sortBy: String = "All"
+    @Environment(\.colorScheme) var colorScheme
+    
+    var body: some View {
+        VStack {
+            // Avatar & Logout button
+            HStack {
+                AvatarView(avatarLink: avatar, width: 70, height: 70)
+                
+                Spacer()
+                
+                Button {
+                    ViewModel.logout()
+                } label: {
+                    VStack {
+                        Image(systemName: "rectangle.portrait.and.arrow.right")
+                            .font(.title)
+                    }
+                    .foregroundColor(colorScheme == .light ? .black : .white)
+                }
+            }
+            
+            // User info
+            HStack (spacing: 20) {
+                Text(user.name)
+                Image(user.nation)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
+                    .frame(width: 30)
+                Text("-")
+                Text(user.region)
+                
+                Spacer()
+            }
+            .font(.system(size: 25))
+            
+            HStack {
+                Text(user.setRank())
+                    
+                Circle()
+                    .fill(colorScheme == .light ? Color.black : Color.white)
+                    .frame(width: 10, height: 10)
+                
+                Text("Join in \(user.joinDateFormatted())")
+                    .foregroundColor(Color.gray)
+                
+                Spacer()
+            }
+            .font(.system(size: 20))
+            
+            // Following/Follower info
+            HStack (spacing: 20) {
+                VStack {
+                    Text("\(user.countFollowing())")
+                    Text("Following")
+                }
+                
+                Divider()
+                    .frame(width: 1, height: 60)
+                
+                VStack {
+                    Text("\(user.countFollower())")
+                    Text("Follower")
+                }
+            }
+            .padding(.top, 10)
+            
+            Text("Overview")
+                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                .font(.system(size: 25))
+            
+            // Overview Section
+            GeometryReader { geometry in
+                VStack {
+                    HStack {
+                        VStack {
+                            Text("Total matches")
+                            Text("\(profile.matchHistoryList.count)")
+                                .font(.system(size: 25))
+                                .fontWeight(.bold)
+                        }
+                        .padding()
+                        .frame(width: geometry.size.width * 0.5)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 2)
+                        )
+                        
+                        VStack {
+                            Text("Winrate")
+                            Text("\(profile.winrate(playerID: currentUserID))")
+                                .font(.system(size: 25))
+                                .fontWeight(.bold)
+                        }
+                        .padding()
+                        .frame(width: geometry.size.width * 0.5)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 2)
+                        )
+                    }
+                    .font(.system(size: 20))
+                    
+                    // More Overview Information...
+                    HStack {
+                        VStack {
+                            Text("Win streak")
+                            Text("\(profile.winstreak(playerID: currentUserID))")
+                                .font(.system(size: 25))
+                                .fontWeight(.bold)
+                        }
+                        .padding()
+                        .frame(width: geometry.size.width * 0.5)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 2)
+                        )
+                        
+                        VStack {
+                            Text("Peak")
+                            let peak = profile.getPeakStreak(playerID: currentUserID, currentPeak: user.peak)
+                            if(peak == 0){
+                                Text("--")
+                                    .font(.system(size: 25))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(colorScheme == .light ? .black : .white)
+                            } else {
+                                Text("\(peak)")
+                                    .font(.system(size: 25))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(user.peak <= 100 ? (user.peak <= 10 ? Color.red: Color.orange) : (colorScheme == .light ? .black : .white))
+                            }
+                        }
+                        .padding()
+                        .frame(width: geometry.size.width * 0.5)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 2)
+                        )
+                    }
+                    .font(.system(size: 20))
+                }
+            }
+            Text("Achievement")
+                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                .font(.system(size: 25))
+                .padding(.top, 200)
+            
+            Text("\(user.achievement != "" ? user.achievement : "You haven't achieved any titles yet")")
+                .font(.system(size: 20))
+                .padding(.top, 5)
+            
+            if(user.achievement != ""){
+                LottieView(filename: "fire.json", mode: 1)
+                    .frame(height: 70)
+            } else {
+                LottieView(filename: "sad.json", mode: 1)
+                    .frame(height: 70)
+            }
+            
+            HStack (alignment: .bottom){
+                Text("Match history")
+                    .font(.system(size: 25))
+                    .padding(.top, 20)
+                
+                Spacer()
+                
+                Picker("Region", selection: $sortBy) {
+                    Text("All").tag("All")
+                    Text("Rank").tag("Rank")
+                    Text("Normal").tag("Normal")
+                }
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.gray, lineWidth: 1)
+                )
+            }
+            
+            if profile.isLoadingHistory {
+                LoadingView()
+            } else if let errorMessage = profile.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+            } else {
+                let filteredHistoryList = profile.getFilteredHistoryList(sortBy: sortBy)
+                if !filteredHistoryList.isEmpty {
+                    ForEach(filteredHistoryList.indices, id: \.self) { index in
+                        MatchHistoryView(currentUserID: currentUserID, MatchHistory: filteredHistoryList[index]!)
+                    }
+                    .padding(.top, 5)
+                } else {
+                    Text("You have not played any game yet.")
+                        .font(.system(size: 20))
+                        .padding(.top, 5)
+                }
+            }
+        }
+        .padding(.horizontal, 20)
     }
 }
 
@@ -232,6 +293,42 @@ struct AvatarView: View {
         }
         .frame(alignment: .leading)
     }
+}
+
+struct MatchHistoryView: View {
+    let currentUserID: String
+    let MatchHistory: MatchHistoryModel
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    var body: some View {
+        HStack {
+            VStack (alignment: .leading) {
+                Text(MatchHistory.type + " match")
+                
+                if let Point = MatchHistory.historyPoint.first(where: { $0.playerID == currentUserID }) {
+                    if Point.point >= 0 {
+                        Text("+ \(Point.point) exp")
+                    } else {
+                        Text("- \(abs(Point.point)) exp")
+                    }
+                }
+                
+                Text("\(formatDate(time: MatchHistory.timestamp))")
+            }
+            Spacer()
+            Text(MatchHistory.winnerID == currentUserID ? "WIN" : "LOSE")
+                .font(.title)
+                .foregroundStyle(MatchHistory.winnerID == currentUserID ? (colorScheme == .light ? Color.black : Color.white) : Color.red)
+        }
+    }
+}
+
+func formatDate(time: Double) -> String{
+    let date = Date(timeIntervalSince1970: time)
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "dd:MM:yyyy HH:mm:ss"
+    return dateFormatter.string(from: date)
 }
 
 #Preview {

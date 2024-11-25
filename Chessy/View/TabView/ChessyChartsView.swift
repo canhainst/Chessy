@@ -11,9 +11,7 @@ struct ChessyChartsView: View {
     @StateObject var profile = ProfileViewModel()
     @StateObject var chart = ChartViewModel()
     
-    @State private var region = ""
-    @State private var avatar = "https://scontent.fhan4-5.fna.fbcdn.net/v/t39.30808-6/446651424_1681220119288938_4828402852445544478_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGvEhaUYJuwPLRQCg7lyf_fpCx3K8NjBGqkLHcrw2MEavwQ_SjguMUG0H6H6FgRcczBEYW2ma_FW13-2QC5KfOz&_nc_ohc=50VZ-XnUTZEQ7kNvgFz4OnB&_nc_ht=scontent.fhan4-5.fna&oh=00_AYCKUnjUS-oPZ8KpuIc9JnHA9UJoppuOL1UWFaJ5Ldp0Qw&oe=667C24D1"
-    
+    @State private var region: String = "Asia"
     var currentUserID: String
     
     var body: some View {
@@ -87,44 +85,7 @@ struct ChessyChartsView: View {
                             VStack {
                                 ForEach(SortedUsers.indices, id: \.self) { index in
                                     let user = SortedUsers[index]
-                                    HStack {
-                                        HStack (spacing: 10) {
-                                            ZStack {
-                                                Image(systemName: "crown.fill")
-                                                    .font(.system(size: 30))
-                                                    .foregroundColor(index == 0 ? .yellow : (index == 1 ? .gray : (index == 2 ? .brown : .white)))
-                                                Text("\(index + 1)")
-                                                    .offset(y: 5)
-                                            }
-                                            
-                                            AsyncImage(url: URL(string: avatar)) { phase in
-                                                switch phase {
-                                                case .empty:
-                                                    // Placeholder while loading
-                                                    BlankAvatarView(width: 50, height: 50)
-                                                case .success(let image):
-                                                    // Successfully loaded image
-                                                    image
-                                                        .resizable()
-                                                        .scaledToFill()
-                                                        .frame(width: 40, height: 40)
-                                                        .clipShape(Circle())
-                                                case .failure:
-                                                    // Failure loading image
-                                                    BlankAvatarView(width: 50, height: 50)
-                                                @unknown default:
-                                                    BlankAvatarView(width: 50, height: 50)
-                                                }
-                                            }
-                                            
-                                            Text("\(user.name)")
-                                                .font(.system(size: 20))
-                                        }
-                                        .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                        
-                                        Text("\(user.exp) Exp")
-                                    }
-                                    .padding(.horizontal, 20)
+                                    userChart(user: user, index: index)
                                 }
                             }
                         } else if let errorMessage = chart.errorMessage {
@@ -150,9 +111,57 @@ struct ChessyChartsView: View {
             Spacer()
         }
         .onAppear {
-            profile.fetchUser(userID: currentUserID)
+            profile.fetchUser()
         }
         .padding(.top, 10)
+    }
+}
+
+struct userChart: View {
+    @State private var avatar = "https://scontent.fhan4-5.fna.fbcdn.net/v/t39.30808-6/446651424_1681220119288938_4828402852445544478_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGvEhaUYJuwPLRQCg7lyf_fpCx3K8NjBGqkLHcrw2MEavwQ_SjguMUG0H6H6FgRcczBEYW2ma_FW13-2QC5KfOz&_nc_ohc=50VZ-XnUTZEQ7kNvgFz4OnB&_nc_ht=scontent.fhan4-5.fna&oh=00_AYCKUnjUS-oPZ8KpuIc9JnHA9UJoppuOL1UWFaJ5Ldp0Qw&oe=667C24D1"
+    let user: User
+    let index: Int
+    
+    var body: some View {
+        HStack {
+            HStack (spacing: 10) {
+                ZStack {
+                    Image(systemName: "crown.fill")
+                        .font(.system(size: 30))
+                        .foregroundColor(index == 0 ? .yellow : (index == 1 ? .gray : (index == 2 ? .brown : .white)))
+                    Text("\(index + 1)")
+                        .offset(y: 5)
+                        .foregroundColor(.black)
+                }
+                
+                AsyncImage(url: URL(string: avatar)) { phase in
+                    switch phase {
+                    case .empty:
+                        // Placeholder while loading
+                        BlankAvatarView(width: 50, height: 50)
+                    case .success(let image):
+                        // Successfully loaded image
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40, height: 40)
+                            .clipShape(Circle())
+                    case .failure:
+                        // Failure loading image
+                        BlankAvatarView(width: 50, height: 50)
+                    @unknown default:
+                        BlankAvatarView(width: 50, height: 50)
+                    }
+                }
+                
+                Text("\(user.name)")
+                    .font(.system(size: 20))
+            }
+            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+            
+            Text("\(user.exp) Exp")
+        }
+        .padding(.horizontal, 20)
     }
 }
 

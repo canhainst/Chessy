@@ -176,7 +176,7 @@ class RegisterWithEmail: RegisterMethod {
     }
     
     private func createNewUser() -> User{
-        return User(name: name, age: age, join: Date().timeIntervalSince1970, region: region, exp: 0, followers: [], following: [], totalMatches: 0, winrate: 0, winStreak: 0, peak: 0, achievement: "")
+        return User(name: name, age: age, join: Date().timeIntervalSince1970, region: region, nation: "vietnam", exp: 0, followers: [], following: [], peak: 0, achievement: "")
     }
     
     private func createAccount(completion: @escaping (String?) -> Void) {

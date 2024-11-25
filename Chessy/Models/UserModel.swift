@@ -15,14 +15,23 @@ struct User: Codable {
     let age: Int
     let join: TimeInterval
     let region: String
+    let nation: String
     let exp: Int
     let followers: [String]?
     let following: [String]?
-    let totalMatches: Int
-    let winrate: Float
-    let winStreak: Int
     let peak: Int
     let achievement: String
+    
+    static func updatePeak(userID: String, newPeak: Int) {
+        let db = Database.database().reference()
+        db.child("users").child(userID).child("peak").setValue(newPeak) { (error, _) in
+            if let error = error {
+                print("Failed to update peak: \(error.localizedDescription)")
+            } else {
+                print("Update peak successfully in Realtime Database")
+            }
+        }
+    }
     
     static func insertUser(userID: String, user: User) {
         let db = Database.database().reference()
@@ -97,10 +106,6 @@ struct User: Codable {
     
     func countFollowing() -> Int {
         return following?.count ?? 0
-    }
-    
-    func Winrate() -> String {
-        return String(format: "%.2f%", winrate * 100)
     }
     
     func intToRoman(_ num: Int) -> String {

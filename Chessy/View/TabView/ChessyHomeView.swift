@@ -13,7 +13,6 @@ struct ChessyHomeView: View {
     @ObservedObject var viewModel = ChessGameViewModel()
     @State private var showInputCodeDialog = false
     @State private var playGame = false
-    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         ZStack {
