@@ -51,10 +51,13 @@ struct GameplayView: View {
                                 Text(viewModel.playerE!.name)
                                     .foregroundColor(.black)
                                 HStack {
-                                    Image(viewModel.playerE!.nation)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
-                                        .frame(width: 30)
+                                    AsyncImage(url: URL(string: viewModel.playerE!.nation.flags.png)) { image in
+                                        image.resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                             .frame(width: 30)
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
                                     Text(viewModel.isHost == false ? "(Host)" : "")
                                         .foregroundColor(.black)
                                 }
@@ -108,10 +111,13 @@ struct GameplayView: View {
                             HStack {
                                 Text(viewModel.isHost == true ? "(Host)" : "")
                                     .foregroundColor(.black)
-                                Image(viewModel.player!.nation)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
-                                    .frame(width: 30)
+                                AsyncImage(url: URL(string: viewModel.player!.nation.flags.png)) { image in
+                                    image.resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                         .frame(width: 30)
+                                } placeholder: {
+                                    ProgressView()
+                                }
                             }
                         }
                         

@@ -15,28 +15,30 @@ struct HeaderLoginView: View {
     let BackgroundColor: Color
     
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 0)
-                .foregroundColor(BackgroundColor)
-                .rotationEffect(Angle(degrees: angle))
-            VStack {
-                Text(Tittle)
-                    .font(.system(size: 50))
-                    .foregroundColor(Color.white)
-                    .scaleEffect(keyboardHeight > 0 ? 0.8 : 1)
-                    .offset(y: (keyboardHeight > 0 ? 20 : 0))
-                    .bold()
-
-                
-                Text(Subtittle)
-                    .font(.system(size: 20))
-                    .foregroundColor(Color.white)
-                    .opacity(keyboardHeight > 0 ? 0 : 1)
+        VStack {
+            ZStack {
+                RoundedRectangle(cornerRadius: 0)
+                    .foregroundColor(BackgroundColor)
+                    .rotationEffect(Angle(degrees: angle))
+                VStack {
+                    Text(Tittle)
+                        .font(.system(size: 50))
+                        .foregroundColor(Color.white)
+                        .scaleEffect(keyboardHeight > 0 ? 0.8 : 1)
+                        .offset(y: (keyboardHeight > 0 ? 20 : 0))
+                        .bold()
+                    
+                    Text(Subtittle)
+                        .font(.system(size: 20))
+                        .foregroundColor(Color.white)
+                        .opacity(keyboardHeight > 0 ? 0 : 1)
+                }
             }
-            .padding(.top, keyboardHeight > 0 ? 130 : 30)
+            .frame(width: UIScreen.main.bounds.width * 3, height: 300)
+            .offset(y: -90)
+            
+            Spacer()
         }
-        .frame(width: UIScreen.main.bounds.width * 3, height: 300)
-        .offset(y: keyboardHeight > 0 ? -50 : -100)
     }
 }
 

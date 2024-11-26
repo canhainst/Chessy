@@ -62,6 +62,13 @@ public class RegisterViewViewModel: ObservableObject {
         }
     }
     
+    @Published var nation: Country? {
+        didSet {
+            validateInput()
+        }
+    }
+    
+    @Published var avatar = ""
     @Published var errorMessage = ""
     @Published var isValidInput = false
     @Published var buttonLabel = "Confirm"
@@ -70,7 +77,7 @@ public class RegisterViewViewModel: ObservableObject {
     
     func createRegisterMethod(_ emailOrPhone: String) -> (any RegisterMethod)? {
         if emailOrPhone.contains("@") {
-            let loginMethod = RegisterWithEmail(email: emailOrPhone, password: password, name: name, age: age, region: region)
+            let loginMethod = RegisterWithEmail(email: emailOrPhone, password: password, name: name, age: age, region: region, nation: nation!)
             loginMethod.updateErrorMessage = { [weak self] errorMessage in
                 self?.errorMessage = errorMessage
             }
@@ -152,16 +159,18 @@ class RegisterWithEmail: RegisterMethod {
     @Published var name: String
     @Published var age: Int
     @Published var region: String
+    @Published var nation: Country
     @Published var errorMessage: String = ""
     
     var updateErrorMessage: ((String) -> Void)?
     
-    init(email: String, password: String, name: String, age: Int, region: String){
+    init(email: String, password: String, name: String, age: Int, region: String, nation: Country){
         self.email = email
         self.password = password
         self.name = name
         self.age = age
         self.region = region
+        self.nation = nation
     }
     
     func register() {
@@ -176,7 +185,7 @@ class RegisterWithEmail: RegisterMethod {
     }
     
     private func createNewUser() -> User{
-        return User(name: name, age: age, join: Date().timeIntervalSince1970, region: region, nation: "vietnam", exp: 0, followers: [], following: [], peak: 0, achievement: "")
+        return User(name: name, age: age, join: Date().timeIntervalSince1970, region: region, nation: nation, exp: 0, followers: [], following: [], peak: 0, achievement: "")
     }
     
     private func createAccount(completion: @escaping (String?) -> Void) {

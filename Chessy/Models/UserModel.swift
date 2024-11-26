@@ -15,7 +15,7 @@ struct User: Codable {
     let age: Int
     let join: TimeInterval
     let region: String
-    let nation: String
+    let nation: Country
     let exp: Int
     let followers: [String]?
     let following: [String]?

@@ -67,10 +67,13 @@ struct ProfileView: View {
             // User info
             HStack (spacing: 20) {
                 Text(user.name)
-                Image(user.nation)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
-                    .frame(width: 30)
+                AsyncImage(url: URL(string: user.nation.flags.png)) { image in
+                    image.resizable()
+                        .aspectRatio(contentMode: .fit)
+                         .frame(width: 30)
+                } placeholder: {
+                    ProgressView()
+                }
                 Text("-")
                 Text(user.region)
                 

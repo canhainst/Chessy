@@ -17,7 +17,7 @@ struct ChessyFriendListView: View {
     let listAddFriend: [(String?, User)?]
     
     init(currentUserID: String) {
-        let usertest = User(name: "Powder", age: 14, join: 0.0, region: "Asia", nation: "vietnam", exp: 1000, followers: nil, following: nil, peak: 0, achievement: "")
+        let usertest = User(name: "Powder", age: 14, join: 0.0, region: "Asia", nation: Country(name: Country.Name(common: "abla"), flags: Country.Flag(png: "")), exp: 1000, followers: nil, following: nil, peak: 0, achievement: "")
         let avatartest = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f092126e-4785-4945-9103-86cb3177c792/width=1200/f092126e-4785-4945-9103-86cb3177c792.jpeg"
         let friendtest = (avatartest, usertest)
         
@@ -79,10 +79,13 @@ struct friend: View {
                 HStack {
                     Text(friend.name)
                         .font(.headline)
-                    Image(friend.nation)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
-                        .frame(width: 30)
+                    AsyncImage(url: URL(string: friend.nation.flags.png)) { image in
+                        image.resizable()
+                            .aspectRatio(contentMode: .fit)
+                             .frame(width: 30)
+                    } placeholder: {
+                        ProgressView()
+                    }
                 }
                 
                 HStack {
@@ -114,10 +117,13 @@ struct friendRequest: View {
                 HStack {
                     Text(friend.name)
                         .font(.headline)
-                    Image(friend.nation)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit) // Giữ tỷ lệ ảnh
-                        .frame(width: 30)
+                    AsyncImage(url: URL(string: friend.nation.flags.png)) { image in
+                        image.resizable()
+                            .aspectRatio(contentMode: .fit)
+                             .frame(width: 30)
+                    } placeholder: {
+                        ProgressView()
+                    }
                 }
                 
                 HStack {
