@@ -21,6 +21,7 @@ struct User: Codable {
     let following: [String]?
     let peak: Int
     let achievement: String
+    let avatar: String?
     
     static func updatePeak(userID: String, newPeak: Int) {
         let db = Database.database().reference()

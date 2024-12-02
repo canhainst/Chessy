@@ -12,10 +12,6 @@ struct GameplayView: View {
     @Binding var playGame: Bool
     @Environment(\.presentationMode) var presentationMode
     
-    @State private var avatar = "https://scontent.fsgn5-15.fna.fbcdn.net/v/t39.30808-1/329403231_474295524745893_3398994404525045455_n.jpg?stp=dst-jpg_s320x320&_nc_cat=101&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=KWc8e4ajb_kQ7kNvgFKv9O1&_nc_ht=scontent.fsgn5-15.fna&_nc_gid=AsElcq77z_KMcshyn3x5587&oh=00_AYCnMSrtUC7eOKxmjZbybn9fTggSMOi9sk27Ia68sgrbDw&oe=670BE6EB"
-    
-    @State private var avatarE = "https://scontent.fsgn5-9.fna.fbcdn.net/v/t39.30808-1/358969835_1295627944715660_3629977290591665492_n.jpg?stp=dst-jpg_s480x480&_nc_cat=102&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=gtW1Gt2_1cEQ7kNvgEnDCQP&_nc_ht=scontent.fsgn5-9.fna&_nc_gid=Az0sZmRT_Wh3QXNYMd7ySUv&oh=00_AYDJX-tKbFz6FsfAR6mlomKEKlcLMRU44mNnYEVj-cM5yQ&oe=67064B0C"
-    
     var body: some View {
         ZStack {
             VStack (spacing: 0) {
@@ -44,7 +40,7 @@ struct GameplayView: View {
                 } else {
                     HStack (alignment: .top){
                         HStack (alignment: .top) {
-                            AvatarView(avatarLink: avatarE, width: 50, height: 50)
+                            AvatarView(avatarLink: viewModel.playerE?.avatar ?? "", width: 50, height: 50)
                                 .frame(alignment: .leading)
                             
                             VStack (alignment: .leading, spacing: 0) {
@@ -121,7 +117,7 @@ struct GameplayView: View {
                             }
                         }
                         
-                        AvatarView(avatarLink: avatar, width: 50, height: 50)
+                        AvatarView(avatarLink: viewModel.player?.avatar ?? "", width: 50, height: 50)
                             .frame(alignment: .trailing)
                     }
                     .fixedSize()
@@ -133,7 +129,7 @@ struct GameplayView: View {
             .background(.white)
             
             if viewModel.playerE != nil {
-                GameStartDialogView(avatarE: avatarE, viewModel: viewModel)
+                GameStartDialogView(avatarE: viewModel.playerE?.avatar ?? "", viewModel: viewModel)
             }
             
             if viewModel.promote {

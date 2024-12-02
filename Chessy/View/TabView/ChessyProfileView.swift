@@ -12,15 +12,13 @@ struct ChessyProfileView: View {
     
     @StateObject var ViewModel = LoginViewViewModel()
     @StateObject var profile = ProfileViewModel()
-
-    @State private var avatar = "https://scontent.fsgn5-14.fna.fbcdn.net/v/t39.30808-6/329403231_474295524745893_3398994404525045455_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=a2CuVbMC_7sQ7kNvgF1OdR8&_nc_ht=scontent.fsgn5-14.fna&_nc_gid=Aj_52EeNMyhMviAl6CaI-Ob&oh=00_AYDRSPuFYsO-3jbvdVzrQZvgba2QD_I1GA56n0AQOlbnHA&oe=67051EAD"
     
     var body: some View {
         ScrollView {
             if profile.isLoading {
                 LoadingView()
             } else if let user = profile.user {
-                ProfileView(currentUserID: currentUserID, user: user, avatar: avatar, ViewModel: ViewModel, profile: profile)
+                ProfileView(currentUserID: currentUserID, user: user, ViewModel: ViewModel, profile: profile)
             } else if let errorMessage = profile.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
@@ -38,10 +36,9 @@ struct ChessyProfileView: View {
 struct ProfileView: View {
     let currentUserID: String
     let user: User
-    let avatar: String
     let ViewModel: LoginViewViewModel
     let profile: ProfileViewModel
-    
+        
     @State private var sortBy: String = "All"
     @Environment(\.colorScheme) var colorScheme
     
@@ -49,7 +46,7 @@ struct ProfileView: View {
         VStack {
             // Avatar & Logout button
             HStack {
-                AvatarView(avatarLink: avatar, width: 70, height: 70)
+                AvatarView(avatarLink: user.avatar ?? "", width: 70, height: 70)
                 
                 Spacer()
                 
@@ -275,24 +272,14 @@ struct AvatarView: View {
     let height: CGFloat
     
     var body: some View {
-        AsyncImage(url: URL(string: avatarLink)) { phase in
-            switch phase {
-            case .empty:
-                // Placeholder while loading
-                BlankAvatarView(width: width, height: height)
-            case .success(let image):
-                // Successfully loaded image
-                image
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: width, height: height)
-                    .clipShape(Circle())
-            case .failure:
-                // Failure loading image
-                BlankAvatarView(width: width, height: height)
-            @unknown default:
-                BlankAvatarView(width: width, height: height)
-            }
+        AsyncImage(url: URL(string: avatarLink)) { image in
+            image
+                .resizable()
+                .scaledToFill()
+                .frame(width: width, height: height)
+                .clipShape(Circle())
+        } placeholder: {
+            BlankAvatarView(width: width, height: height)
         }
         .frame(alignment: .leading)
     }

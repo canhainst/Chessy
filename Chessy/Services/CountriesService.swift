@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CountryViewModel: ObservableObject {
+class CountriesService: ObservableObject {
     func fetchCountries() async throws -> [Country] {
         guard let url = URL(string: "https://restcountries.com/v3.1/all") else {
             throw GHError.invalidURL
@@ -27,10 +27,4 @@ class CountryViewModel: ObservableObject {
             throw GHError.invalidData
         }
     }
-}
-
-enum GHError: Error {
-    case invalidURL
-    case invalidResponse
-    case invalidData
 }

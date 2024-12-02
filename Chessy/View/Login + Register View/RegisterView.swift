@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct pickAvatarView: View {
-    @State private var selectedImage: UIImage?
+    @Binding var selectedImage: UIImage?
     @State private var isImagePickerPresented = false
     
     var body: some View {
@@ -21,7 +21,7 @@ struct pickAvatarView: View {
                         Image(uiImage: selectedImage)
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 150, height: 150)
+                            .frame(width: 140, height: 140)
                             .clipShape(Circle())
                             .overlay(Circle().stroke(Color.white, lineWidth: 3))
                     }
@@ -33,7 +33,7 @@ struct pickAvatarView: View {
                     ZStack {
                         Circle()
                             .fill(.white)
-                            .frame(width: 150, height: 150)
+                            .frame(width: 140, height: 140)
                             .overlay(Circle().stroke(Color.black, lineWidth: 1))
 
                         Image(systemName: "person.fill")
@@ -59,8 +59,10 @@ struct RegisterView: View {
     @State private var isSecure: Bool = true
     
     @StateObject var Register = RegisterViewViewModel()
-    @StateObject var viewModel = CountryViewModel()
+    @StateObject var viewModel = CountriesService()
     @State private var country: [Country] = []
+    
+    @State private var selectedImage: UIImage?
     
     var body: some View {
         NavigationView{
@@ -74,9 +76,8 @@ struct RegisterView: View {
                 ScrollView {
                     VStack (spacing: 15) {
                         Spacer()
-                        
                         ZStack {
-                            pickAvatarView()
+                            pickAvatarView(selectedImage: $selectedImage)
                                 .offset(y: -5)
                             if let selectedCountry = Register.nation {
                                 VStack {
@@ -201,8 +202,14 @@ struct RegisterView: View {
                             .padding()
                         
                         Button(action: {
-                            Register.region = (Register.region == "" ? "Asia" : Register.region)
-                            Register.register()
+                            if selectedImage == nil {
+                                Register.region = (Register.region == "" ? "Asia" : Register.region)
+                                Register.register()
+                            } else {
+                                Task {
+                                    await uploadUserWithAvatar(avatar: selectedImage!)
+                                }
+                            }
                         }) {
                             Text(Register.isValidInput ? Register.buttonLabel : "Confirm")
                                 .font(.headline)
@@ -252,6 +259,19 @@ struct RegisterView: View {
                 LinearGradient(gradient: Gradient(colors: [Color.white, Color.blue.opacity(0.1)]), startPoint: .top, endPoint: .bottom)
                     .edgesIgnoringSafeArea(.all)
             )
+        }
+    }
+    
+    func uploadUserWithAvatar(avatar: UIImage) async {
+        let imgurService = ImgurService()
+        do {
+            let url = try await imgurService.upload(image: avatar)
+            Register.avatar = url
+            print("Uploaded Image URL: \(url)")
+            Register.region = (Register.region == "" ? "Asia" : Register.region)
+            Register.register()
+        } catch {
+            print("Error uploading image: \(error)")
         }
     }
 }

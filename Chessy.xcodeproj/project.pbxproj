@@ -38,7 +38,7 @@
 		8A58871C2CB0DFEA008FCBDC /* King.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A58871B2CB0DFEA008FCBDC /* King.swift */; };
 		8A97C8412CF6575500C97797 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A97C8402CF6575500C97797 /* ImagePicker.swift */; };
 		8A97C8432CF65C2200C97797 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A97C8422CF65C2100C97797 /* Country.swift */; };
-		8A97C8452CF65C5000C97797 /* CountryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A97C8442CF65C5000C97797 /* CountryViewModel.swift */; };
+		8A97C8452CF65C5000C97797 /* CountriesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A97C8442CF65C5000C97797 /* CountriesService.swift */; };
 		8AA4034B2C1DB8B200E0AEE3 /* sad.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AA4034A2C1DB8B200E0AEE3 /* sad.json */; };
 		8AA403502C1E06A200E0AEE3 /* ChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA4034F2C1E06A200E0AEE3 /* ChartViewModel.swift */; };
 		8AA7A4EC2CB8DAE900BF37A5 /* SocketIO in Frameworks */ = {isa = PBXBuildFile; productRef = 8AA7A4EB2CB8DAE900BF37A5 /* SocketIO */; };
@@ -60,6 +60,8 @@
 		8ABF76252C1B775A007639E5 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 8ABF76242C1B775A007639E5 /* FirebaseDatabase */; };
 		8ABF76272C1B87D2007639E5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8ABF76262C1B87D2007639E5 /* GoogleService-Info.plist */; };
 		8AD65AE82C1099F40046BEF0 /* RegisterViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AD65AE72C1099F40046BEF0 /* RegisterViewViewModel.swift */; };
+		8ADC53622CFDDFB40022F347 /* ImgurService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC53612CFDDFB40022F347 /* ImgurService.swift */; };
+		8ADC53642CFDE1BA0022F347 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC53632CFDE1BA0022F347 /* Errors.swift */; };
 		8AF4767E2C1649C200E5ABCB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF4767D2C1649C100E5ABCB /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -94,7 +96,7 @@
 		8A58871B2CB0DFEA008FCBDC /* King.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = King.swift; sourceTree = "<group>"; };
 		8A97C8402CF6575500C97797 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		8A97C8422CF65C2100C97797 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
-		8A97C8442CF65C5000C97797 /* CountryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryViewModel.swift; sourceTree = "<group>"; };
+		8A97C8442CF65C5000C97797 /* CountriesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesService.swift; sourceTree = "<group>"; };
 		8AA4034A2C1DB8B200E0AEE3 /* sad.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sad.json; sourceTree = "<group>"; };
 		8AA4034F2C1E06A200E0AEE3 /* ChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewModel.swift; sourceTree = "<group>"; };
 		8AA7A4ED2CBA017B00BF37A5 /* MatchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchModel.swift; sourceTree = "<group>"; };
@@ -113,6 +115,8 @@
 		8AB327032CE5886C005F2CD3 /* shakehands.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = shakehands.json; sourceTree = "<group>"; };
 		8ABF76262C1B87D2007639E5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8AD65AE72C1099F40046BEF0 /* RegisterViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewViewModel.swift; sourceTree = "<group>"; };
+		8ADC53612CFDDFB40022F347 /* ImgurService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImgurService.swift; sourceTree = "<group>"; };
+		8ADC53632CFDE1BA0022F347 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		8AF4767D2C1649C100E5ABCB /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -155,6 +159,7 @@
 			children = (
 				8A24CC292C0DD9A3003CF826 /* Info.plist */,
 				8A24CC362C0DDDE9003CF826 /* Other */,
+				8ADC53602CFDDF870022F347 /* Services */,
 				8A24CC352C0DDDD9003CF826 /* Models */,
 				8A24CC342C0DDDC1003CF826 /* ViewModels */,
 				8A24CC332C0DDDBB003CF826 /* View */,
@@ -196,7 +201,6 @@
 				8AA4034F2C1E06A200E0AEE3 /* ChartViewModel.swift */,
 				8A58870C2CB0D70C008FCBDC /* ChessGameViewModel.swift */,
 				8A97C8402CF6575500C97797 /* ImagePicker.swift */,
-				8A97C8442CF65C5000C97797 /* CountryViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -221,6 +225,7 @@
 				8A24CC1B2C0DD8B3003CF826 /* ChessyApp.swift */,
 				8A24CC1F2C0DD8B9003CF826 /* Assets.xcassets */,
 				8AF4767D2C1649C100E5ABCB /* Extensions.swift */,
+				8ADC53632CFDE1BA0022F347 /* Errors.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -299,6 +304,15 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8ADC53602CFDDF870022F347 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				8ADC53612CFDDFB40022F347 /* ImgurService.swift */,
+				8A97C8442CF65C5000C97797 /* CountriesService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -415,6 +429,7 @@
 				8A2C2A942C15C7CD0058CA57 /* UserModel.swift in Sources */,
 				8A460E722C1D41B600CE6E26 /* ProfileViewModel.swift in Sources */,
 				8A97C8412CF6575500C97797 /* ImagePicker.swift in Sources */,
+				8ADC53622CFDDFB40022F347 /* ImgurService.swift in Sources */,
 				8A58870F2CB0D73F008FCBDC /* ChessBoardView.swift in Sources */,
 				8A580E372C26BFFF00C750B1 /* LoadingView.swift in Sources */,
 				8A39595E2C2680D900F7C3B3 /* SplashView.swift in Sources */,
@@ -425,8 +440,9 @@
 				8A5887162CB0DFC6008FCBDC /* Knight.swift in Sources */,
 				8AB326FE2CE57EF8005F2CD3 /* GameResultDialogView.swift in Sources */,
 				8AB326F72CDEEFA7005F2CD3 /* PromoteViewDialog.swift in Sources */,
-				8A97C8452CF65C5000C97797 /* CountryViewModel.swift in Sources */,
+				8A97C8452CF65C5000C97797 /* CountriesService.swift in Sources */,
 				8AD65AE82C1099F40046BEF0 /* RegisterViewViewModel.swift in Sources */,
+				8ADC53642CFDE1BA0022F347 /* Errors.swift in Sources */,
 				8A5887122CB0DFAB008FCBDC /* Pawn.swift in Sources */,
 				8A5887142CB0DFB7008FCBDC /* Rook.swift in Sources */,
 				8A2C2A8A2C15BE0D0058CA57 /* ChessyFriendListView.swift in Sources */,

@@ -13,13 +13,11 @@ struct ChessyFriendListView: View {
     @State var selection: String
     let option: [String] = ["My friends", "Friend requests"]
     
-    let listfriend: [(String?, User)?]
-    let listAddFriend: [(String?, User)?]
+    let listfriend: [User?]
+    let listAddFriend: [User?]
     
     init(currentUserID: String) {
-        let usertest = User(name: "Powder", age: 14, join: 0.0, region: "Asia", nation: Country(name: Country.Name(common: "abla"), flags: Country.Flag(png: "")), exp: 1000, followers: nil, following: nil, peak: 0, achievement: "")
-        let avatartest = "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f092126e-4785-4945-9103-86cb3177c792/width=1200/f092126e-4785-4945-9103-86cb3177c792.jpeg"
-        let friendtest = (avatartest, usertest)
+        let friendtest = User(name: "Powder", age: 14, join: 0.0, region: "Asia", nation: Country(name: Country.Name(common: "abla"), flags: Country.Flag(png: "")), exp: 1000, followers: nil, following: nil, peak: 0, achievement: "", avatar: "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/f092126e-4785-4945-9103-86cb3177c792/width=1200/f092126e-4785-4945-9103-86cb3177c792.jpeg")
         
         self.currentUserID = currentUserID
         self.selection = "My friends"
@@ -49,18 +47,18 @@ struct ChessyFriendListView: View {
 struct ListfriendView: View {
     var selectedView: String
     
-    let listfriend: [(String?, User)?]
-    let listAddFriend: [(String?, User)?]
+    let listfriend: [User?]
+    let listAddFriend: [User?]
     
     var body: some View {
         switch selectedView {
         case "My friends":
             List(listfriend.indices, id: \.self) { id in
-                friend(avatar: listfriend[id]!.0!, friend: listfriend[id]!.1)
+                friend(friend: listfriend[id]!)
             }
         case "Friend requests":
             List(listAddFriend.indices, id: \.self) { id in
-                friendRequest(avatar: listAddFriend[id]!.0!, friend: listAddFriend[id]!.1)
+                friendRequest(friend: listAddFriend[id]!)
             }
         default:
             Spacer()
@@ -69,12 +67,11 @@ struct ListfriendView: View {
 }
 
 struct friend: View {
-    let avatar: String
     let friend: User
     
     var body: some View {
         HStack {
-            AvatarView(avatarLink: avatar, width: 60, height: 60)
+            AvatarView(avatarLink: friend.avatar ?? "", width: 60, height: 60)
             VStack (alignment: .leading){
                 HStack {
                     Text(friend.name)
@@ -107,12 +104,11 @@ struct friend: View {
 }
 
 struct friendRequest: View {
-    let avatar: String
     let friend: User
     
     var body: some View {
         HStack {
-            AvatarView(avatarLink: avatar, width: 60, height: 70)
+            AvatarView(avatarLink: friend.avatar ?? "", width: 60, height: 70)
             VStack (alignment: .leading){
                 HStack {
                     Text(friend.name)
