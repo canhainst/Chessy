@@ -178,7 +178,7 @@ class RegisterWithEmail: RegisterMethod {
     func register() {
         createAccount { userID in
             if let userID = userID {
-                let newUser = self.createNewUser()
+                let newUser = self.createNewUser(userID: userID)
                 User.insertUser(userID: userID, user: newUser)
             } else {
                 print("Failed to create user")
@@ -186,8 +186,8 @@ class RegisterWithEmail: RegisterMethod {
         }
     }
     
-    private func createNewUser() -> User{
-        return User(name: name, age: age, join: Date().timeIntervalSince1970, region: region, nation: nation, exp: 0, followers: [], following: [], peak: 0, achievement: "", avatar: avatar)
+    private func createNewUser(userID: String) -> User{
+        return User(id: userID, name: name, age: age, join: Date().timeIntervalSince1970, region: region, nation: nation, exp: 0, peak: 0, achievement: "", avatar: avatar, isPublic: true)
     }
     
     private func createAccount(completion: @escaping (String?) -> Void) {

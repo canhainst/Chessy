@@ -118,7 +118,6 @@ struct ChessyChartsView: View {
 }
 
 struct userChart: View {
-    @State private var avatar = "https://scontent.fhan4-5.fna.fbcdn.net/v/t39.30808-6/446651424_1681220119288938_4828402852445544478_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGvEhaUYJuwPLRQCg7lyf_fpCx3K8NjBGqkLHcrw2MEavwQ_SjguMUG0H6H6FgRcczBEYW2ma_FW13-2QC5KfOz&_nc_ohc=50VZ-XnUTZEQ7kNvgFz4OnB&_nc_ht=scontent.fhan4-5.fna&oh=00_AYCKUnjUS-oPZ8KpuIc9JnHA9UJoppuOL1UWFaJ5Ldp0Qw&oe=667C24D1"
     let user: User
     let index: Int
     
@@ -134,25 +133,7 @@ struct userChart: View {
                         .foregroundColor(.black)
                 }
                 
-                AsyncImage(url: URL(string: avatar)) { phase in
-                    switch phase {
-                    case .empty:
-                        // Placeholder while loading
-                        BlankAvatarView(width: 50, height: 50)
-                    case .success(let image):
-                        // Successfully loaded image
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 40, height: 40)
-                            .clipShape(Circle())
-                    case .failure:
-                        // Failure loading image
-                        BlankAvatarView(width: 50, height: 50)
-                    @unknown default:
-                        BlankAvatarView(width: 50, height: 50)
-                    }
-                }
+                AvatarView(avatarLink: user.avatar ?? "", width: 50, height: 50)
                 
                 Text("\(user.name)")
                     .font(.system(size: 20))

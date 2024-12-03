@@ -21,6 +21,7 @@
 		8A2C2A902C15BFCF0058CA57 /* ChessyProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2C2A8F2C15BFCF0058CA57 /* ChessyProfileView.swift */; };
 		8A2C2A942C15C7CD0058CA57 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2C2A932C15C7CC0058CA57 /* UserModel.swift */; };
 		8A2C2A962C15C88D0058CA57 /* MainViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2C2A952C15C88D0058CA57 /* MainViewViewModel.swift */; };
+		8A2D6B282CFE5CDF00D221AF /* FriendsListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A2D6B272CFE5CDF00D221AF /* FriendsListViewModel.swift */; };
 		8A39595E2C2680D900F7C3B3 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A39595D2C2680D900F7C3B3 /* SplashView.swift */; };
 		8A460E722C1D41B600CE6E26 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A460E712C1D41B600CE6E26 /* ProfileViewModel.swift */; };
 		8A580E332C26BC9900C750B1 /* splash_anim.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A580E322C26BC9900C750B1 /* splash_anim.json */; };
@@ -79,6 +80,7 @@
 		8A2C2A8F2C15BFCF0058CA57 /* ChessyProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessyProfileView.swift; sourceTree = "<group>"; };
 		8A2C2A932C15C7CC0058CA57 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		8A2C2A952C15C88D0058CA57 /* MainViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewViewModel.swift; sourceTree = "<group>"; };
+		8A2D6B272CFE5CDF00D221AF /* FriendsListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsListViewModel.swift; sourceTree = "<group>"; };
 		8A39595D2C2680D900F7C3B3 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		8A460E712C1D41B600CE6E26 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		8A580E322C26BC9900C750B1 /* splash_anim.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = splash_anim.json; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				8AA4034F2C1E06A200E0AEE3 /* ChartViewModel.swift */,
 				8A58870C2CB0D70C008FCBDC /* ChessGameViewModel.swift */,
 				8A97C8402CF6575500C97797 /* ImagePicker.swift */,
+				8A2D6B272CFE5CDF00D221AF /* FriendsListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -221,9 +224,9 @@
 			isa = PBXGroup;
 			children = (
 				8AA4034C2C1DB8B700E0AEE3 /* Animation */,
+				8A24CC1F2C0DD8B9003CF826 /* Assets.xcassets */,
 				8ABF76262C1B87D2007639E5 /* GoogleService-Info.plist */,
 				8A24CC1B2C0DD8B3003CF826 /* ChessyApp.swift */,
-				8A24CC1F2C0DD8B9003CF826 /* Assets.xcassets */,
 				8AF4767D2C1649C100E5ABCB /* Extensions.swift */,
 				8ADC53632CFDE1BA0022F347 /* Errors.swift */,
 			);
@@ -445,6 +448,7 @@
 				8ADC53642CFDE1BA0022F347 /* Errors.swift in Sources */,
 				8A5887122CB0DFAB008FCBDC /* Pawn.swift in Sources */,
 				8A5887142CB0DFB7008FCBDC /* Rook.swift in Sources */,
+				8A2D6B282CFE5CDF00D221AF /* FriendsListViewModel.swift in Sources */,
 				8A2C2A8A2C15BE0D0058CA57 /* ChessyFriendListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

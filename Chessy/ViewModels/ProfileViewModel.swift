@@ -15,6 +15,7 @@ class ProfileViewModel: ObservableObject {
     @Published var isLoadingHistory: Bool
     @Published var errorMessage: String?
     @Published var matchHistoryList: [MatchHistoryModel?]
+    @Published var friendsCount: Int?
     
     init() {
         self.userID = Auth.auth().currentUser!.uid
@@ -23,6 +24,12 @@ class ProfileViewModel: ObservableObject {
         self.isLoadingHistory = true
         self.errorMessage = nil
         self.matchHistoryList = []
+
+        User.countFriends(userID: userID) { count in
+            DispatchQueue.main.async {
+                self.friendsCount = count
+            }
+        }
     }
     
     func fetchUser() {
@@ -64,7 +71,6 @@ class ProfileViewModel: ObservableObject {
             }
         }
     }
-
     
     func saveUser(userID: String, user: User) {
         self.isLoading = true
