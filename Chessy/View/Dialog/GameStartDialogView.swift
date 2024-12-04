@@ -87,6 +87,7 @@ struct GameStartDialogView: View {
                 timer.invalidate()
                 playerEtmp = viewModel.playerEID!
                 viewModel.setPlayerColor(roomCode: viewModel.roomCode)
+                viewModel.listenRequest(userID: viewModel.playerID, friend: viewModel.playerEID!)
             }
         }
     }

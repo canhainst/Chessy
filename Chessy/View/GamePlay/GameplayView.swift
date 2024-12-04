@@ -57,11 +57,58 @@ struct GameplayView: View {
                                     Text(viewModel.isHost == false ? "(Host)" : "")
                                         .foregroundColor(.black)
                                 }
+                                Button {
+                                    if viewModel.isSentRequest {
+                                        // recall
+                                        User.recallRequest(userID: viewModel.playerID, deleteID: viewModel.playerEID!)
+                                        User.deleteRequest(userID: viewModel.playerEID!, deleteID: viewModel.playerID)
+                                    } else if !viewModel.isAddedFriend {
+                                        // add friend
+                                        User.sendRequest(userID: viewModel.playerID, newRequestID: viewModel.playerEID!)
+                                        User.addRequest(userID: viewModel.playerEID!, newRequestID: viewModel.playerID)
+                                    }
+                                } label: {
+                                    HStack {
+                                        if !viewModel.isAddedFriend && !viewModel.isSentRequest {
+                                            Image(systemName: "plus")
+                                                .font(.subheadline)
+                                                .foregroundColor(.black)
+                                        }
+                                        
+                                        Text(viewModel.isAddedFriend ? "Friend" : (viewModel.isSentRequest ? "Recall" : "Add friend"))
+                                            .font(.subheadline)
+                                            .foregroundColor(.black)
+                                        
+                                        if viewModel.isSentRequest {
+                                            Image(systemName: "arrow.forward")
+                                                .font(.subheadline)
+                                                .foregroundColor(.black)
+                                        }
+                                        
+                                        if viewModel.isAddedFriend {
+                                            Image(systemName: "checkmark")
+                                                .font(.subheadline)
+                                                .foregroundColor(.black)
+                                        }
+                                    }
+                                    .padding(.horizontal, 7)
+                                    .padding(.vertical, 3)
+                                }
+                                .disabled(viewModel.isAddedFriend)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color.black, lineWidth: 1)
+                                )
+                                .padding(.top, 3)
                             }
                         }
                         .fixedSize()
                         .padding()
                         .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 0.5)
+                        .onAppear {
+                            viewModel.listenFriendCheck(userID: viewModel.playerID, friend: viewModel.playerEID!)
+                            viewModel.listenSendRequest(userID: viewModel.playerID, friend: viewModel.playerEID!)
+                        }
                                         
                         if !viewModel.deadPieces.isEmpty {
                             getDeadPiecesImage(for: viewModel.playerColor! == .white ? .black : .white)
@@ -127,6 +174,11 @@ struct GameplayView: View {
                 .padding() // Khoảng đệm xung quanh
             }
             .background(.white)
+            
+            if viewModel.isFriendRequest && viewModel.playerE != nil {
+                RequestAddFriend(name: viewModel.playerE!.name, viewModel: viewModel)
+                    .offset(x: -70, y: 250)
+            }
             
             if viewModel.playerE != nil {
                 GameStartDialogView(avatarE: viewModel.playerE?.avatar ?? "", viewModel: viewModel)

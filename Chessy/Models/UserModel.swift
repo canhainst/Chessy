@@ -75,6 +75,36 @@ struct User: Codable {
         })
     }
     
+    static func getAllUser(completion: @escaping ([User]) -> Void) {
+        let db = Database.database().reference().child("users")
+        db.observeSingleEvent(of: .value) { snapshot in
+            guard let value = snapshot.value as? [String: Any] else {
+                completion([])
+                return
+            }
+            
+            let userIDs = value.keys.map { $0 }
+            
+            var users: [User] = []
+            let dispatchGroup = DispatchGroup()
+            
+            for userID in userIDs {
+                dispatchGroup.enter()
+                getUserByID(userID: userID) { user in
+                    if let user = user {
+                        users.append(user)
+                    }
+                    dispatchGroup.leave()
+                }
+            }
+            
+            dispatchGroup.notify(queue: .main) {
+                completion(users)
+            }
+        }
+    }
+
+    
     static func getAllUserByRegion(region: String, completion: @escaping ([User]) -> Void) {
         let db = Database.database().reference().child("users")
         db.queryOrdered(byChild: "region").queryEqual(toValue: region)

@@ -37,6 +37,10 @@ class ChessGameViewModel: ObservableObject {
     @Published var pieceMoves: [pieceMove]?
     @Published var previousPositions: [[[ChessPiece?]]]
     @Published var moveCount: Int
+    
+    @Published var isAddedFriend: Bool = false
+    @Published var isSentRequest: Bool = false
+    @Published var isFriendRequest: Bool = false
         
     init() {
         self.board = Array(repeating: Array(repeating: nil, count: 8), count: 8)
@@ -88,6 +92,54 @@ class ChessGameViewModel: ObservableObject {
                 }
             }
         }
+    }
+    
+    func listenFriendCheck(userID: String, friend: String) {
+        let friendRef = Database.database().reference().child("Networks").child(userID).child("friends")
+        
+        friendRef.observe(.value, with: { [weak self] snapshot in
+            guard self != nil else { return }
+            
+            if let friendsList = snapshot.value as? [String] {
+                if friendsList.contains(friend) {
+                    self?.isAddedFriend = true
+                } else {
+                    self?.isAddedFriend = false
+                }
+            }
+        })
+    }
+    
+    func listenRequest(userID: String, friend: String) {
+        let friendRef = Database.database().reference().child("Networks").child(userID).child("requests")
+        
+        friendRef.observe(.value, with: { [weak self] snapshot in
+            guard self != nil else { return }
+            
+            if let requestsList = snapshot.value as? [String] {
+                if requestsList.contains(friend) {
+                    self?.isFriendRequest = true
+                } else {
+                    self?.isFriendRequest = false
+                }
+            }
+        })
+    }
+    
+    func listenSendRequest(userID: String, friend: String) {
+        let friendRef = Database.database().reference().child("Networks").child(userID).child("requestsSent")
+        
+        friendRef.observe(.value, with: { [weak self] snapshot in
+            guard self != nil else { return }
+            
+            if let sentRequestsList = snapshot.value as? [String] {
+                if sentRequestsList.contains(friend) {
+                    self?.isSentRequest = true
+                } else {
+                    self?.isSentRequest = false
+                }
+            }
+        })
     }
     
     func listenForGameChanges(roomCode: String) {

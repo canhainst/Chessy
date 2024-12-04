@@ -53,6 +53,8 @@ struct ChessyHomeView: View {
                 .padding()
             }
             
+            SearchingBar()
+            
             InputRoomCodeViewDialog(currentUserID: currentUserID, isShow: $showInputCodeDialog, isPlayGame: $playGame, viewModel: viewModel)
         }
         .fullScreenCover(isPresented: $playGame) {

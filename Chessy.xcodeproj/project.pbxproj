@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A02ABAB2CFFC3AF0008A044 /* SearchingBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A02ABAA2CFFC3AE0008A044 /* SearchingBar.swift */; };
 		8A24CC1C2C0DD8B3003CF826 /* ChessyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A24CC1B2C0DD8B3003CF826 /* ChessyApp.swift */; };
 		8A24CC1E2C0DD8B3003CF826 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A24CC1D2C0DD8B3003CF826 /* MainView.swift */; };
 		8A24CC202C0DD8B9003CF826 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A24CC1F2C0DD8B9003CF826 /* Assets.xcassets */; };
@@ -37,6 +38,11 @@
 		8A5887182CB0DFD3008FCBDC /* Bishop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5887172CB0DFD3008FCBDC /* Bishop.swift */; };
 		8A58871A2CB0DFDE008FCBDC /* Queen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5887192CB0DFDE008FCBDC /* Queen.swift */; };
 		8A58871C2CB0DFEA008FCBDC /* King.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A58871B2CB0DFEA008FCBDC /* King.swift */; };
+		8A7FA3882D00F95300165CCA /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7FA3872D00F95300165CCA /* AvatarView.swift */; };
+		8A7FA38A2D00FAAD00165CCA /* FriendTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7FA3892D00FAAD00165CCA /* FriendTab.swift */; };
+		8A7FA38C2D00FB4000165CCA /* HomeViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7FA38B2D00FB4000165CCA /* HomeViewViewModel.swift */; };
+		8A7FA38E2D00FF0B00165CCA /* SearchUserItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7FA38D2D00FF0B00165CCA /* SearchUserItem.swift */; };
+		8A7FA3902D01161F00165CCA /* RequestAddFriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7FA38F2D01161F00165CCA /* RequestAddFriend.swift */; };
 		8A97C8412CF6575500C97797 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A97C8402CF6575500C97797 /* ImagePicker.swift */; };
 		8A97C8432CF65C2200C97797 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A97C8422CF65C2100C97797 /* Country.swift */; };
 		8A97C8452CF65C5000C97797 /* CountriesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A97C8442CF65C5000C97797 /* CountriesService.swift */; };
@@ -67,6 +73,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8A02ABAA2CFFC3AE0008A044 /* SearchingBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchingBar.swift; sourceTree = "<group>"; };
 		8A24CC182C0DD8B3003CF826 /* Chessy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chessy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A24CC1B2C0DD8B3003CF826 /* ChessyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessyApp.swift; sourceTree = "<group>"; };
 		8A24CC1D2C0DD8B3003CF826 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -96,6 +103,11 @@
 		8A5887172CB0DFD3008FCBDC /* Bishop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bishop.swift; sourceTree = "<group>"; };
 		8A5887192CB0DFDE008FCBDC /* Queen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queen.swift; sourceTree = "<group>"; };
 		8A58871B2CB0DFEA008FCBDC /* King.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = King.swift; sourceTree = "<group>"; };
+		8A7FA3872D00F95300165CCA /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
+		8A7FA3892D00FAAD00165CCA /* FriendTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendTab.swift; sourceTree = "<group>"; };
+		8A7FA38B2D00FB4000165CCA /* HomeViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewViewModel.swift; sourceTree = "<group>"; };
+		8A7FA38D2D00FF0B00165CCA /* SearchUserItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserItem.swift; sourceTree = "<group>"; };
+		8A7FA38F2D01161F00165CCA /* RequestAddFriend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestAddFriend.swift; sourceTree = "<group>"; };
 		8A97C8402CF6575500C97797 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		8A97C8422CF65C2100C97797 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 		8A97C8442CF65C5000C97797 /* CountriesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountriesService.swift; sourceTree = "<group>"; };
@@ -139,6 +151,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8A02ABA92CFFC38F0008A044 /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				8A02ABAA2CFFC3AE0008A044 /* SearchingBar.swift */,
+				8A7FA3872D00F95300165CCA /* AvatarView.swift */,
+				8A7FA3892D00FAAD00165CCA /* FriendTab.swift */,
+				8A7FA38D2D00FF0B00165CCA /* SearchUserItem.swift */,
+				8A7FA38F2D01161F00165CCA /* RequestAddFriend.swift */,
+			);
+			path = Component;
+			sourceTree = "<group>";
+		};
 		8A24CC0F2C0DD8B3003CF826 = {
 			isa = PBXGroup;
 			children = (
@@ -182,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				8A4328C02CB3970A00B6A2A7 /* Dialog */,
+				8A02ABA92CFFC38F0008A044 /* Component */,
 				8A2C2A912C15C0080058CA57 /* TabView */,
 				8A2C2A922C15C0380058CA57 /* Login + Register View */,
 				8AB326FC2CE43D50005F2CD3 /* GamePlay */,
@@ -196,14 +221,15 @@
 		8A24CC342C0DDDC1003CF826 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				8A7FA38B2D00FB4000165CCA /* HomeViewViewModel.swift */,
 				8AB2659A2C0F1AE800A085FB /* LoginViewViewModel.swift */,
 				8AD65AE72C1099F40046BEF0 /* RegisterViewViewModel.swift */,
 				8A2C2A952C15C88D0058CA57 /* MainViewViewModel.swift */,
 				8A460E712C1D41B600CE6E26 /* ProfileViewModel.swift */,
 				8AA4034F2C1E06A200E0AEE3 /* ChartViewModel.swift */,
 				8A58870C2CB0D70C008FCBDC /* ChessGameViewModel.swift */,
-				8A97C8402CF6575500C97797 /* ImagePicker.swift */,
 				8A2D6B272CFE5CDF00D221AF /* FriendsListViewModel.swift */,
+				8A97C8402CF6575500C97797 /* ImagePicker.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -410,18 +436,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A58870D2CB0D70C008FCBDC /* ChessGameViewModel.swift in Sources */,
+				8A7FA38A2D00FAAD00165CCA /* FriendTab.swift in Sources */,
 				8A97C8432CF65C2200C97797 /* Country.swift in Sources */,
+				8A02ABAB2CFFC3AF0008A044 /* SearchingBar.swift in Sources */,
 				8A58870B2CB0D69C008FCBDC /* ChessModel.swift in Sources */,
 				8AB265972C0F0C9B00A085FB /* HeaderLoginView.swift in Sources */,
 				8AA7A4EE2CBA017C00BF37A5 /* MatchModel.swift in Sources */,
 				8AAA8D2F2C1D5FFC00BCF372 /* LottieView.swift in Sources */,
 				8AB326F92CDF02DB005F2CD3 /* InputRoomCodeViewDialog.swift in Sources */,
+				8A7FA38E2D00FF0B00165CCA /* SearchUserItem.swift in Sources */,
 				8A2C2A882C15BD5D0058CA57 /* ChessyHomeView.swift in Sources */,
 				8A5887092CB0C4E3008FCBDC /* GameplayView.swift in Sources */,
 				8AB326F52CDED524005F2CD3 /* GameStartDialogView.swift in Sources */,
 				8A2C2A962C15C88D0058CA57 /* MainViewViewModel.swift in Sources */,
 				8AB2659B2C0F1AE800A085FB /* LoginViewViewModel.swift in Sources */,
 				8A5887182CB0DFD3008FCBDC /* Bishop.swift in Sources */,
+				8A7FA3882D00F95300165CCA /* AvatarView.swift in Sources */,
 				8A2C2A902C15BFCF0058CA57 /* ChessyProfileView.swift in Sources */,
 				8A2C2A8C2C15BE3E0058CA57 /* ChessyChartsView.swift in Sources */,
 				8AB265932C0F0C1800A085FB /* LoginView.swift in Sources */,
@@ -431,6 +461,7 @@
 				8AB265952C0F0C7100A085FB /* RegisterView.swift in Sources */,
 				8A2C2A942C15C7CD0058CA57 /* UserModel.swift in Sources */,
 				8A460E722C1D41B600CE6E26 /* ProfileViewModel.swift in Sources */,
+				8A7FA38C2D00FB4000165CCA /* HomeViewViewModel.swift in Sources */,
 				8A97C8412CF6575500C97797 /* ImagePicker.swift in Sources */,
 				8ADC53622CFDDFB40022F347 /* ImgurService.swift in Sources */,
 				8A58870F2CB0D73F008FCBDC /* ChessBoardView.swift in Sources */,
@@ -444,6 +475,7 @@
 				8AB326FE2CE57EF8005F2CD3 /* GameResultDialogView.swift in Sources */,
 				8AB326F72CDEEFA7005F2CD3 /* PromoteViewDialog.swift in Sources */,
 				8A97C8452CF65C5000C97797 /* CountriesService.swift in Sources */,
+				8A7FA3902D01161F00165CCA /* RequestAddFriend.swift in Sources */,
 				8AD65AE82C1099F40046BEF0 /* RegisterViewViewModel.swift in Sources */,
 				8ADC53642CFDE1BA0022F347 /* Errors.swift in Sources */,
 				8A5887122CB0DFAB008FCBDC /* Pawn.swift in Sources */,
