@@ -38,6 +38,24 @@ struct MatchModel: Codable {
     let rematch: [Bool]?
     let type: String
     
+    static func isUserInGame(userID: String, completion: @escaping (Bool) -> Void) {
+        let db = Database.database().reference()
+        db.child("games").observeSingleEvent(of: .value) { snapshot in
+            // Duyệt qua tất cả các trò chơi
+            for case let gameSnapshot as DataSnapshot in snapshot.children {
+                if let gameData = gameSnapshot.value as? [String: Any],
+                   let playerIDs = gameData["playerID"] as? [String] {
+                    // Kiểm tra nếu userID tồn tại trong playerID
+                    if playerIDs.contains(userID) {
+                        completion(true) // Người dùng đang tham gia trong trò chơi
+                        return
+                    }
+                }
+            }
+            completion(false) // Người dùng không có trong bất kỳ trò chơi nào
+        }
+    }
+    
     static func deleteGame(roomID: String){
         let db = Database.database().reference()
         let query = db.child("games").queryOrdered(byChild: "roomID").queryEqual(toValue: roomID)
@@ -204,28 +222,28 @@ struct MatchModel: Codable {
     }
     
     static func insertNewGame(matchModel: MatchModel, completion: @escaping (Bool) -> Void) {
-            let db = Database.database().reference()
-            
-            // Kiểm tra xem roomID đã tồn tại chưa
-            db.child("games").queryOrdered(byChild: "roomID").queryEqual(toValue: matchModel.roomID).observeSingleEvent(of: .value) { snapshot in
-                if snapshot.exists() {
-                    // Mã phòng đã tồn tại
-                    print("Room code already exists. Insertion failed.")
-                    completion(false)
-                } else {
-                    // Mã phòng chưa tồn tại, cho phép thêm vào
-                    db.child("games").child(matchModel.gameID.uuidString).setValue(matchModel.asDictionary()) { (error, _) in
-                        if let error = error {
-                            print("Failed to save game: \(error.localizedDescription)")
-                            completion(false)
-                        } else {
-                            print("Game saved successfully in Realtime Database")
-                            completion(true)
-                        }
+        let db = Database.database().reference()
+        
+        // Kiểm tra xem roomID đã tồn tại chưa
+        db.child("games").queryOrdered(byChild: "roomID").queryEqual(toValue: matchModel.roomID).observeSingleEvent(of: .value) { snapshot in
+            if snapshot.exists() {
+                // Mã phòng đã tồn tại
+                print("Room code already exists. Insertion failed.")
+                completion(false)
+            } else {
+                // Mã phòng chưa tồn tại, cho phép thêm vào
+                db.child("games").child(matchModel.gameID.uuidString).setValue(matchModel.asDictionary()) { (error, _) in
+                    if let error = error {
+                        print("Failed to save game: \(error.localizedDescription)")
+                        completion(false)
+                    } else {
+                        print("Game saved successfully in Realtime Database")
+                        completion(true)
                     }
                 }
             }
         }
+    }
     
     static func joinGame(playerID: String, roomID: String, completion: @escaping (Int) -> Void) {
         let db = Database.database().reference()

@@ -92,7 +92,3 @@ struct GameStartDialogView: View {
         }
     }
 }
-
-#Preview {
-    GameStartDialogView(avatarE: "https://scontent.fsgn5-15.fna.fbcdn.net/v/t39.30808-1/329403231_474295524745893_3398994404525045455_n.jpg?stp=dst-jpg_s320x320&_nc_cat=101&ccb=1-7&_nc_sid=0ecb9b&_nc_ohc=KWc8e4ajb_kQ7kNvgFKv9O1&_nc_ht=scontent.fsgn5-15.fna&_nc_gid=AsElcq77z_KMcshyn3x5587&oh=00_AYCnMSrtUC7eOKxmjZbybn9fTggSMOi9sk27Ia68sgrbDw&oe=670BE6EB", viewModel: ChessGameViewModel(), playerEtmp: "")
-}

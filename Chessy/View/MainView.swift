@@ -16,7 +16,12 @@ struct MainView: View {
             if showSplash {
                 SplashView()
             } else if viewModel.isSignedIn, !viewModel.currentUserID.isEmpty {
-                ChessyView(currentUserID: viewModel.currentUserID)
+                ChessyView(
+                    currentUserID: viewModel.currentUserID,
+                    challengerID: $viewModel.challengerID,
+                    code: $viewModel.code,
+                    isPlayGame: $viewModel.isPlayGame
+                )
             } else {
                 LoginView()
             }

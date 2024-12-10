@@ -12,8 +12,7 @@ struct InputRoomCodeViewDialog: View {
     let currentUserID: String
     @Binding var isShow: Bool
     @Binding var isPlayGame: Bool
-    @ObservedObject var viewModel: ChessGameViewModel
-    
+    @Binding var roomCode: String
     @State private var messTitle: String = ""
     @State private var message: String = ""
     @State private var isAlertShown = false
@@ -36,7 +35,7 @@ struct InputRoomCodeViewDialog: View {
                         }
                     }
                     
-                    TextField("Room code 6 digits", text: $viewModel.roomCode)
+                    TextField("Room code 6 digits", text: $roomCode)
                         .keyboardType(.numberPad)
                         .padding()
                         .foregroundColor(.black)
@@ -49,7 +48,7 @@ struct InputRoomCodeViewDialog: View {
                     
                     HStack {
                         Button {
-                            let newMatch = MatchModel(gameID: UUID(), roomID: viewModel.roomCode, playerID: [currentUserID, nil], pieceMoves: [], winnerID: nil, host: currentUserID, whitePiece: nil, rematch: nil, type: "Normal")
+                            let newMatch = MatchModel(gameID: UUID(), roomID: roomCode, playerID: [currentUserID, nil], pieceMoves: [], winnerID: nil, host: currentUserID, whitePiece: nil, rematch: nil, type: "Normal")
                             
                             MatchModel.insertNewGame(matchModel: newMatch) { success in
                                 if success {
@@ -71,10 +70,10 @@ struct InputRoomCodeViewDialog: View {
                                 .background(Color.blue)
                                 .cornerRadius(10)
                         }
-                        .disabled(viewModel.roomCode.count != 6) // Disable if code is not 6 digits
+                        .disabled(roomCode.count != 6) // Disable if code is not 6 digits
                         
                         Button {
-                            MatchModel.joinGame(playerID: currentUserID, roomID: viewModel.roomCode) { errorCode in
+                            MatchModel.joinGame(playerID: currentUserID, roomID: roomCode) { errorCode in
                                 switch errorCode {
                                 case 0:
                                     isShow = false

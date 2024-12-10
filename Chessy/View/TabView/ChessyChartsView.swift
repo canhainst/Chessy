@@ -20,11 +20,10 @@ struct ChessyChartsView: View {
                 LoadingView()
             } else if let user = profile.user {
                 VStack {
-                    Image("thachdau")
+                    Image(user.getBadgeImg())
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 120, height: 120)
-                        .clipShape(Circle())
+                        .frame(width: 100, height: 100)
                     
                     Text(user.setRank())
                         .font(.system(size: 25))
@@ -125,13 +124,16 @@ struct userChart: View {
         HStack {
             HStack (spacing: 10) {
                 ZStack {
-                    Image(systemName: "crown.fill")
-                        .font(.system(size: 30))
-                        .foregroundColor(index == 0 ? .yellow : (index == 1 ? .gray : (index == 2 ? .brown : .white)))
+                    if index < 3 {
+                        Image(systemName: "crown.fill")
+                            .font(.system(size: 30))
+                            .foregroundColor(index == 0 ? .yellow : (index == 1 ? .gray : (index == 2 ? .brown : .white)))
+                    }
+                    
                     Text("\(index + 1)")
                         .offset(y: 5)
-                        .foregroundColor(.black)
                 }
+                .frame(width: 30)
                 
                 AvatarView(avatarLink: user.avatar ?? "", width: 50, height: 50)
                 

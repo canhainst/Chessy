@@ -42,9 +42,9 @@ class ChessGameViewModel: ObservableObject {
     @Published var isSentRequest: Bool = false
     @Published var isFriendRequest: Bool = false
         
-    init() {
+    init(roomID: String) {
         self.board = Array(repeating: Array(repeating: nil, count: 8), count: 8)
-        self.roomCode = ""
+        self.roomCode = roomID
         self.deadPieces = []
         self.playerID = Auth.auth().currentUser!.uid
         

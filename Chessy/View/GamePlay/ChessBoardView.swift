@@ -139,8 +139,3 @@ struct ChessSquareView: View {
         }
     }
 }
-
-
-#Preview {
-    ChessBoardView(viewModel: ChessGameViewModel())
-}

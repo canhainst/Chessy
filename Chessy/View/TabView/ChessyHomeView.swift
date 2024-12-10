@@ -10,9 +10,9 @@ import FirebaseAuth
 
 struct ChessyHomeView: View {
     var currentUserID: String
-    @ObservedObject var viewModel = ChessGameViewModel()
+    @Binding var isPlayGame: Bool
+    @Binding var roomCode: String
     @State private var showInputCodeDialog = false
-    @State private var playGame = false
     
     var body: some View {
         ZStack {
@@ -55,14 +55,7 @@ struct ChessyHomeView: View {
             
             SearchingBar()
             
-            InputRoomCodeViewDialog(currentUserID: currentUserID, isShow: $showInputCodeDialog, isPlayGame: $playGame, viewModel: viewModel)
-        }
-        .fullScreenCover(isPresented: $playGame) {
-            GameplayView(viewModel: viewModel, playGame: .constant(true))
+            InputRoomCodeViewDialog(currentUserID: currentUserID, isShow: $showInputCodeDialog, isPlayGame: $isPlayGame, roomCode: $roomCode)
         }
     }
-}
-
-#Preview {
-    ChessyHomeView(currentUserID: "WqzIRI2TH8XzS6fqOB7W5VROzaF2")
 }

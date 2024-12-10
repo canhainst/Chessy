@@ -46,7 +46,3 @@ struct PromoteViewDialog: View {
         }
     }
 }
-
-#Preview {
-    PromoteViewDialog(viewModel: ChessGameViewModel())
-}
